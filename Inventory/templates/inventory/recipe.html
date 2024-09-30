@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Recipe</title>
+</head>
+<body>
+    <h1>Recipe</h1>
+    <ul>
+        {% for requirement in recipe %}
+            <li>{{requirement.item}} requires {{requirement.quantity}} of {{requirement.ingredient}}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

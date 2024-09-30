@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Inventory</title>
+</head>
+<body>
+    <h1>Inventory</h1>
+    <ul>
+        {% for ingredient in ingredients %}
+            <li>{{ ingredient.name }}: {{ ingredient.quantity }} {{ ingredient.unit }}: {{ingredient.unit_price}}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

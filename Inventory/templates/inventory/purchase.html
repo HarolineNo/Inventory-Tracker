@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Purchases</title>
+</head>
+<body>
+    <h1>Purchases</h1>
+    <ul>
+        {% for purchase in purchases %}
+            <li>{{purchase.item}} was purchased {{ purchase.timestamp}} for ${{ purchase.cost }}.</li>
+        {% endfor %}
+    </ul>
+    
+</body>
+</html>
