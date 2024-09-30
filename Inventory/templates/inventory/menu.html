@@ -2,13 +2,26 @@
 <html lang="en">
 <head>
     <title>Menu</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inventory/styles.css' %}">
 </head>
 <body>
     <h1>Menu</h1>
-    <ul>
-        {% for food in menu %}
-            <li>{{ food.item }}: ${{ food.price }}</li>
-        {% endfor %}
-    </ul>
+    <table class="spreadsheet">
+        <thead>
+            <tr>
+                <th>Menu Item</th>
+                <th>Price</th>
+            <tr>
+        </thead>
+        <tbody>
+            {% for food in menu %}
+            <tr>
+                <td>{{ food.item }}</td>
+                <td>${{ food.price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
