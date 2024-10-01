@@ -6,12 +6,23 @@
     <link rel="stylesheet" type="text/css" href="{% static 'inventory/styles.css' %}">
 </head>
 <body>
-    <h1>Menu</h1>
+    <header>
+        <h1>Inventory Tracker</h1>
+    </header>
+    <h2>Menu</h2>
+    <div class="sidebar">
+        <h2 id='bar'>Main Menu</h2>
+            <div><a href="{% url 'ingredients_list' %}">Ingredients List</a></div>
+            <div><a href="{% url 'menu_items' %}">Menu Items</a></div>
+            <div><a href="{% url 'recipe_requirements' %}">Recipe</a></div>
+            <div><a href="{% url 'purchase_log' %}">Purchase Log</a></div>
+    </div>
+    <div>
     <table class="spreadsheet">
         <thead>
             <tr>
-                <th>Menu Item</th>
-                <th>Price</th>
+                <th>MENU ITEM</th>
+                <th>PRICE</th>
             <tr>
         </thead>
         <tbody>
@@ -23,5 +34,6 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
 </body>
 </html>

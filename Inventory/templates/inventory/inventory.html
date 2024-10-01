@@ -6,26 +6,38 @@
     <link rel="stylesheet" type="text/css" href="{% static 'inventory/styles.css' %}">
 </head>
 <body>
-    <h1>Inventory</h1>
-    <table class="spreadsheet">
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Quanity</th>
-                <th>Unit</th>
-                <th>Unit Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for ingredient in ingredients %}
-            <tr>
-                <td>{{ ingredient.name }}</td>
-                <td>{{ ingredient.quantity }}</td>
-                <td>{{ ingredient.unit }}</td>
-                <td>{{ingredient.unit_price}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <header>
+        <h1>Inventory Tracker</h1>
+    </header>
+    <h2>Ingredients</h2>
+    <div class="sidebar">
+        <h2 id='bar'>Main Menu</h2>
+            <div><a href="{% url 'ingredients_list' %}">Ingredients List</a></div>
+            <div><a href="{% url 'menu_items' %}">Menu Items</a></div>
+            <div><a href="{% url 'recipe_requirements' %}">Recipe</a></div>
+            <div><a href="{% url 'purchase_log' %}">Purchase Log</a></div>
+    </div>
+    <div>
+        <table class="spreadsheet">
+            <thead>
+                <tr>
+                    <th>ITEM</th>
+                    <th>QUANTITY</th>
+                    <th>UNIT</th>
+                    <th>UNIT PRICE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ingredient in ingredients %}
+                <tr>
+                    <td>{{ ingredient.name }}</td>
+                    <td>{{ ingredient.quantity }}</td>
+                    <td>{{ ingredient.unit }}</td>
+                    <td>${{ingredient.unit_price}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
