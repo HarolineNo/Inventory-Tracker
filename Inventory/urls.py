@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import InventoryView, MenuView, RecipeView, PurchaseView
+from .views import InventoryView, MenuView, RecipeView, PurchaseView, add_ingredient, inform_view
 
 urlpatterns = [
     path('ingredients/', InventoryView.as_view(), name='ingredients_list'),
     path('menu/', MenuView.as_view(), name='menu_items'),
     path('recipes/', RecipeView.as_view(), name='recipe_requirements'),
-    path('purchases/', PurchaseView.as_view(), name='purchase_log')
+    path('purchases/', PurchaseView.as_view(), name='purchase_log'),
+    path('add_ingredients/', add_ingredient, name='add_ingredients'),
+    path('inform/', inform_view, name='inform_view')
 ]

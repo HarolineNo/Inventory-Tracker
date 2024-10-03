@@ -1,11 +1,8 @@
 body {
-    font-family: monospace, sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 15px;
     color: rgb(15, 109, 138);
-}
-
-body > :not(.sidebar):not(header) {
-    margin-left: 180px;
+    background-color: rgb(229, 232, 232);
 }
 
 header {
@@ -38,7 +35,7 @@ h2:not(#bar) {
     width: 100%;
     border-collapse: collapse;
     text-align: left; 
-    background-color: rgb(246, 247, 248);
+    background-color: white;
 }
 
 table.spreadsheet td, th {
@@ -59,8 +56,9 @@ table.spreadsheet th {
     text-decoration: none;
     color: rgb(232, 232, 232);
     font-family: sans-serif;
-    font-size: 20px;
-    padding: 25px;
+    font-size: 15px;
+    padding: 15px;
+    margin-bottom: 5px;
 }
 
 .sidebar div a:hover {
@@ -81,5 +79,6 @@ table.spreadsheet th {
     text-align: center;
     margin-top: 10px;
     margin-bottom: 15px;
-    font-size: 33px;
+    font-size: 30px;
+    font-weight: bold;
 }

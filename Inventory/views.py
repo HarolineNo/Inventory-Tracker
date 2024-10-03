@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from Inventory.models import Ingredient, MenuItem, RecipeRequirement, Purchase
 from django.db.models import Sum, F, FloatField
+from .models import Ingredient
 
 # Create your views here.
 
@@ -35,6 +36,21 @@ class PurchaseView(ListView):
             context["cost"] = cost
 
             return context
-    
-    
 
+def add_ingredient(request):
+    if request.method == "POST":
+        # Create a new Ingredient instance with the form data
+        ingredient = Ingredient(
+            name=request.POST['name'],
+            quantity=request.POST['quantity'],
+            unit=request.POST['unit'],
+            unit_price=request.POST['unit_price']
+        )
+        ingredient.save()  # Save the new ingredient to the database
+        return redirect('ingredients_list')
+
+        # Redirect to the ingredients list after saving
+    return render(request, 'ingredients_list')
+    
+def inform_view(request):
+    return render(request, 'forms/inventory/inform.html')

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Purchase Log</title>
+    </head>
+    <body>
+        <h1>Log a New Purchase</h1>
+        <form method="post">
+            {% csrf_token %}
+            <label for="item">Purchased Item:</label>
+            <input type="text" id="item" name="item" required><br>
+
+            <label for="cost">Price:</label>
+            <input type="number" id="cost" name="cost" required><br>
+        </form>
+    </body>
+</html>
