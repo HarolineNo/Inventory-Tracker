@@ -54,3 +54,28 @@ def add_ingredient(request):
     
 def inform_view(request):
     return render(request, 'forms/inventory/inform.html')
+
+def delete_item(request, id):
+     obj = Ingredient.objects.get(id=id)
+     obj.delete()
+     return redirect('ingredients_list')
+
+def edit_item(request, id):
+     obj = Ingredient.objects.get(id=id)
+     ingredientdict = {
+          'name' : obj.name,
+          'quantity' : obj.quantity,
+          'unit' : obj.unit,
+          'unit_price' : obj.unit_price,
+          'id' : id
+     }
+     return render(request,'forms/inventory/edit.html', context=ingredientdict)
+
+def update(request, id):
+     obj = Ingredient.objects.get(id=id)
+     obj.name = request.POST['name']
+     obj.quantity = request.POST['quantity']
+     obj.unit = request.POST['unit']
+     obj.unit_price = request.POST['unit_price']
+     obj.save()
+     return redirect('ingredients_list')

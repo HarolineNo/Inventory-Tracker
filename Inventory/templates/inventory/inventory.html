@@ -10,16 +10,20 @@
     <link rel="stylesheet" type="text/css" href="{% static 'inventory/styles.css' %}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-light">
-        <div class="container-xxl">
-            <span class="fw-bold text-secondary fs-3 text"> 
-                Inventory Tracker
-            </span>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+        <div class="container-fluid d-flex justify-content-start align-items-center">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-end" id="main-nav">
+            <span class="fw-bold text-light fs-5" style="margin-left: 10px;"> 
+                Inventory Tracker
+            </span>
+            <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="main-nav">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Main Menu</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'ingredients_list' %}">Ingredients List</a>
@@ -37,34 +41,58 @@
             </div>
         </div>
     </nav>
-    <div>
-        <table class="table table-striped">
+    <div class="mt-5 p-3">
+        <table class="table table-striped" style="border: 2px solid black;">
             <thead>
                 <tr>
-                    <th colospan="12" class="d-flex justify-content-between align=items-center">
-                        <span>Ingredients</span>
-                        <a href="{% url 'inform_view' %}" class="btn btn-link">
-                            <i class="bi bi-plus"></i>
-                        </a>
+                    <th colspan="6">
+                        <div class="d-flex align-items-end">
+                            Ingredients
+                            <a class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#addIngredientForm">
+                                <i class="bi bi-plus-circle" style="margin-left: 560px;"></i>
+                            </a>
+                        </div>
+                    </th>
                 </tr>
                 <tr>
                     <th scope="col">ITEM</th>
                     <th scope="col">QUANTITY</th>
                     <th scope="col">UNIT</th>
                     <th scope="col">UNIT PRICE</th>
+                    <th scope="col">EDIT</th>
+                    <th scope="col">DELETE</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
                 {% for ingredient in ingredients %}
                 <tr>
-                    <td>{{ ingredient.name }}</td>
+                    <td class="text-capitalize">{{ ingredient.name }}</td>
                     <td>{{ ingredient.quantity }}</td>
                     <td>{{ ingredient.unit }}</td>
                     <td>${{ingredient.unit_price}}</td>
+                    <td>
+                        <a href="{% url 'edit_item' ingredient.id %}" 
+                        onclick="alert('Edit {{ ingredient.name }}');" 
+                        class="text-success me-2">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_item' ingredient.id %}" 
+                        onclick="if(confirm('Are you sure you want to delete this item?')) { alert('{{ ingredient.name }} deleted'); }" 
+                        class="text-danger">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+    <div class="offcanvas offcanvas-end text-bg-light" tabindex="-1" id="addIngredientForm">
+        <div>
+            {% include 'forms/inventory/inform.html' %}
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
