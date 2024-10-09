@@ -20,16 +20,17 @@ class MenuItem(models.Model):
         return self.item
 
 class RecipeRequirement(models.Model):
-    item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    item = models.CharField(max_length=50)
+    ingredient = models.CharField(max_length=50)
     quantity = models.DecimalField(max_digits=10, decimal_places=0)
+    unit = models.CharField(max_length=50, default='units')
     ingredient_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     def __str__(self):
         return f"{self.item} requires {self.quantity} of {self.ingredient}"
 
 class Purchase(models.Model):
-    item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    item = models.CharField(max_length=50)
     timestamp = models.DateTimeField(auto_now_add=True)
     cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 

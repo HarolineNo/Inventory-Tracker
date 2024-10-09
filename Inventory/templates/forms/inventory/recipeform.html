@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Add a New Recipe Requirement</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Add Recipe</h1>
+        <form method="post" action="{% url 'add_recipe' %}" class="row row-cols-lg-auto g-3 align-items-center">
+            {% csrf_token %}
+            <div class="col-12">
+                <div class="input-group">
+                    <span class="input-group-text">Menu Item:</span>
+                    <input type="text" id="item" name="item" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="input-group">
+                    <span class="input-group-text">Ingredient:</span>
+                    <input type="text" id="ingredint" name="ingredient" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="input-group">
+                    <span class="input-group-text">Quantity:</span>
+                    <input type="number" id="quantity" name="quantity" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="input-group">
+                    <span class="input-group-text">Unit:</span>
+                    <input type="text" id="unit" name="unit" class="form-control" placeholder="e.g. ounces" required>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="input-group">
+                    <span class="input-group-text">Unit Price:</span>
+                    <span class="input-group-text">$</span>
+                    <input type="decimal" id="ingredient_price" name="ingredient_price" class="form-control" placeholder="0.00" required>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="{% url 'recipe_requirements' %}" class="btn btn-primary">Return to List</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
