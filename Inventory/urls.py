@@ -10,7 +10,6 @@ urlpatterns = [
     path('add_item/', add_item, name='add_item'),
     path('add_recipe/', add_recipe, name='add_recipe'),
     path('add_purchase/', add_purchase, name='add_purchase'),
-    path('inform/', inform_view, name='inform_view'),
     path('delete-ingredient/<int:id>/', delete_item, name='delete_item'),
     path('delete-menu/<int:id>/', delete_item, name='delete_menu'),
     path('delete-recipe/<int:id>/', delete_recipe, name='delete_recipe'),

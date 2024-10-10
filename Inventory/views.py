@@ -72,8 +72,6 @@ def add_purchase(request):
         return redirect('purchase_log')
     return render(request, 'purchase_log')
     
-def inform_view(request):
-    return render(request, 'forms/inventory/inform.html')
 
 def menuform_view(request):
     return render(request, 'forms/inventory/menuform.html')
