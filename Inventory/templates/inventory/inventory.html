@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Inventory</title>
     <style>
+        body {
+            background-color: rgb(244, 246, 250);
+        }
         .nav-link:hover {
             background-color: #0d6efd;
         }
@@ -15,112 +18,128 @@
 <body>
     <nav class="navbar navbar-dark bg-dark fixed-top">
         <div class="container-fluid d-flex justify-content-start align-items-center">
-            <span class="fw-bold text-light fs-5"> 
-                Inventory Tracker
+            <span class="text-light fs-5"> 
+                <strong>Inventory</strong> Tracker
             </span>
         </div>
     </nav>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-1 bg-dark g-0" style="height: 100vh;">
+            <div class="col-md-2 g-0" style="height: 100vh; background-color: rgb(52, 58, 63);">
                 <nav class="nav flex-column" style="margin-top: 50px;">
                     <a class="nav-link mt-4 mb-4" style="color: white;" href="{% url 'ingredients_list' %}">
-                        <i class="bi bi-table" style="margin-right: 5px;"></i>Inventory
+                        <i class="bi bi-table" style="margin-right: 10px;"></i>Inventory
                     </a>
                     <a class="nav-link mb-4" style="color: white;" href="{% url 'menu_items' %}">
-                        <i class="bi bi-egg-fried" style="margin-right: 5px;"></i>Menu</a>
+                        <i class="bi bi-egg-fried" style="margin-right: 10px;"></i>Menu</a>
                     <a class="nav-link mb-4" style="color: white;" href="{% url 'recipe_requirements' %}">
-                        <i class="bi bi-card-list" style="margin-right: 5px;"></i>Recipe
+                        <i class="bi bi-card-list" style="margin-right: 10px;"></i>Recipe
                     </a>
                     <a class="nav-link" style="color: white;" href="{% url 'purchase_log' %}">
-                        <i class="bi bi-bag" style="margin-right: 5px;"></i>Purchase
+                        <i class="bi bi-bag" style="margin-right: 10px;"></i>Purchase
                     </a>
                 </nav>
             </div>
-            <div class="col-md-8 mt-5 pt-3">
-                <table class="table table-striped" style="border: 1px solid black;">
-                    <thead>
-                        <tr>
-                            <th colspan="6">
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <span class="fs-4">INGREDIENTS</span>
-                                </div>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th scope="col">Item</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Unit</th>
-                            <th scope="col">Unit Price</th>
-                            <th scope="col">Edit</th>
-                            <th scope="col">Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        {% for ingredient in ingredients %}
-                        <tr>
-                            <td class="text-capitalize">{{ ingredient.name }}</td>
-                            <td>{{ ingredient.quantity }}</td>
-                            <td>{{ ingredient.unit }}</td>
-                            <td>${{ ingredient.unit_price }}</td>
-                            <td>
-                                <a href="{% url 'edit_item' ingredient.id %}" 
-                                onclick="alert('Edit {{ ingredient.name }}');" 
-                                class="text-success me-2">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{% url 'delete_item' ingredient.id %}" onclick="if(confirm('Are you sure you want to delete this item?')) { alert('{{ ingredient.name }} deleted'); }" 
-                                class="text-danger">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-3 mt-5 pt-3">
-                <div class="container" style="border: 1px solid black;">
-                    <h1 class="mb-4 mt-3">Add a New Ingredient</h1>
-                    <form method="post" action="{% url 'add_ingredients' %}" class="row row-cols-lg-auto g-3 align-items-center">
-                        {% csrf_token %}
-                        <div class="col-12">
-                            <div class="input-group">
-                                <span class="input-group-text">Ingredient Name:</span>
-                                <input type="text" id="name" name="name" class="form-control" required>
-                            </div>
-                        </div>
-            
-                        <div class="col-12">
-                            <div class="input-group">
-                                <span class="input-group-text">Quantity:</span>
-                                <input type="number" id="quantity" name="quantity" class="form-control" required>
-                            </div>
-                        </div>
-            
-                        <div class="col-12">
-                            <div class="input-group">
-                                <span class="input-group-text">Unit:</span>
-                                <input type="text" id="unit" name="unit" class="form-control" placeholder="e.g. ounces" required>
-                            </div>
-                        </div>
-            
-                        <div class="col-12">
-                            <div class="input-group">
-                                <span class="input-group-text">Unit Price:</span>
-                                <span class="input-group-text">$</span>
-                                <input type="number" id="unit_price" name="unit_price" class="form-control" placeholder="0.00" required>
-                            </div>
-                        </div>
-            
-                        <div class="col-12 mb-4">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
+            <!--Stock-->
+            <div class="col mt-5 pt-3">
+                <div class="mb-4 pb-3 fs-2" style="color: rgb(50,50,50); border-bottom: 1px solid rgb(200,200,200);">
+                    Inventory
                 </div>
-            </div>
+                <div class="mb-5 container-fluid">
+                    <div class="row">
+                        <div class="d-flex col-md-4 align-items-center" style="border: 1px solid rgb(230,230,230); background-color: white;">
+                            <i class="bi bi-box-seam" style="margin-right: 10px;"></i>Total Ingredients
+                        </div>
+                        <div class="d-flex col-md-4 align-items-center" style="padding: 20px; border: 1px solid rgb(230,230,230); background-color: white;">
+                            <i class="bi bi-box-seam" style="margin-right: 10px"></i>Low Stock
+                        </div>
+                        <div class="d-flex col-md-4 align-items-center" style="padding: 20px; border: 1px solid rgb(230,230,230); background-color: white;">
+                            <i class="bi bi-box-seam" style="margin-right: 10px"></i>Out of Stock
+                        </div>
+                    </div>
+                </div>
+
+                <!--start of table-->
+                <div class="row">
+                    <div class="col-md-9">
+                        <table class="shadow table table-striped" style="border: 1px solid rbg(230,230,230);">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Unit</th>
+                                    <th scope="col">Unit Price</th>
+                                    <th scope="col">Edit</th>
+                                    <th scope="col">Delete</th>
+                                </tr>
+                            <tbody class="table-group-divider">
+                                {% for ingredient in ingredients %}
+                                <tr>
+                                    <td class="text-capitalize">{{ ingredient.name }}</td>
+                                    <td>{{ ingredient.quantity }}</td>
+                                    <td>{{ ingredient.unit }}</td>
+                                    <td>${{ ingredient.unit_price }}</td>
+                                    <td>
+                                        <a href="{% url 'edit_item' ingredient.id %}" 
+                                        onclick="alert('Edit {{ ingredient.name }}');" 
+                                        class="text-success me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'delete_item' ingredient.id %}" onclick="if(confirm('Are you sure you want to delete this item?')) { alert('{{ ingredient.name }} deleted'); }" 
+                                        class="text-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--start of form-->
+                    <div class="col-md-3">
+                        <div class="shadow-sm container" style="background-color: white; border-radius: 10px;">
+                            <h4 class="d-flex justify-content-center mb-4 pt-4">Add a New Ingredient</h4>
+                            <form method="post" action="{% url 'add_ingredients' %}" class="row row-cols-lg-auto g-3 align-items-center">
+                                {% csrf_token %}
+                                <div class="col-12">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Ingredient Name:</span>
+                                        <input type="text" id="name" name="name" class="form-control" required>
+                                    </div>
+                                </div>
+                    
+                                <div class="col-12">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Quantity:</span>
+                                        <input type="number" id="quantity" name="quantity" class="form-control" required>
+                                    </div>
+                                </div>
+                    
+                                <div class="col-12">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Unit:</span>
+                                        <input type="text" id="unit" name="unit" class="form-control" placeholder="e.g. ounces" required>
+                                    </div>
+                                </div>
+                    
+                                <div class="col-12">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Unit Price:</span>
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" id="unit_price" name="unit_price" class="form-control" placeholder="0.00" required>
+                                    </div>
+                                </div>
+                    
+                                <div class="col-12 mb-4">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>    
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
