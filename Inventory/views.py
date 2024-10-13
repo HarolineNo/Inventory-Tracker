@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
-from Inventory.models import Ingredient, MenuItem, RecipeRequirement, Purchase
+from Inventory.models import*
 from django.db.models import Sum, F, FloatField
 from .models import Ingredient
 from django.contrib import messages
+from .forms import*
 
 # Create your views here.
 
@@ -102,6 +103,15 @@ def delete_purchase(request, id):
      obj.delete()
      return redirect('purchase_log')
 
+def edit_menu(request, id):
+     obj = MenuItem.objects.get(id=id)
+     menudict = {
+          'item' : obj.item,
+          'price' : obj.price,
+          'id' : id
+     }
+     return render(request,'forms/inventory/edit_menu_form.html', context=menudict)
+
 def edit_item(request, id):
      obj = Ingredient.objects.get(id=id)
      ingredientdict = {
@@ -122,21 +132,14 @@ def update(request, id):
      obj.save()
      return redirect('ingredients_list')
 
-def edit_menu(request, id):
-     obj = MenuItem.objects.get(id=id)
-     menudict = {
-          'item' : obj.item,
-          'price' : obj.price,
-          'id' : id
-     }
-     return render(request,'forms/inventory/edit_menu.html', context=menudict)
-
 def update_menu(request, id):
-     obj = MenuItem.objects.get(id=id)
-     obj.item = request.POST['item']
-     obj.price = request.POST['price']
-     obj.save()
-     return redirect('menu_items')
+     if request.method == "POST":
+        obj = MenuItem.objects.get(id=id)
+        obj.item = request.POST['item']
+        obj.price = request.POST['price']
+        obj.save()
+        return redirect('menu_items')
+     return render(request, 'menu_items')
 
 def edit_recipe(request, id):
      obj = RecipeRequirement.objects.get(id=id)
