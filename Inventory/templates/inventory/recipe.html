@@ -1,90 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Recipe</title>
-</head>
-<body>
-    <nav class="navbar navbar-dark bg-dark fixed-top">
-        <div class="container-fluid d-flex justify-content-start align-items-center">
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
-            data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <span class="fw-bold text-light fs-5" style="margin-left: 10px;"> 
-                Inventory Tracker
-            </span>
-            <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="main-nav">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Main Menu</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'ingredients_list' %}">Ingredients List</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'menu_items' %}">Menu Items</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'recipe_requirements' %}">Recipe</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'purchase_log' %}">Purchase Log</a>
-                    </li>
-                </ul>
+{% extends 'inventory/inventory.html' %}
+
+{% block tile %}Recipe{% endblock tile %}
+{% block page_title %}Recipe Requirements{% endblock page_title %}
+{% block stock %}
+    <div class="mb-4 pb-2 fs-2" style="color: rgb(50,50,50); border-bottom: 1px solid rgb(200,200,200);">
+        Requirements
+    </div>
+{% endblock stock %}
+
+{% block table%}
+    <thead>
+        <tr>
+            <th scope="col">Recipe</th>
+            <th scope="col">Delete</th>
+        </tr>
+    <tbody class="table-group-divider">
+        {% for requirement in recipe %}
+            <tr>
+                <td class="text-capitalize editable" data.id="{{ requirement.id }}" data-type="item">{{requirement.item}} requires {{requirement.quantity}} {{requirement.unit}} of {{requirement.ingredient}}</td>
+                <td>
+                    <a href="{% url 'delete_recipe' requirement.id %}" onclick="if(confirm('Are you sure you want to delete this item?')) { alert('{{ requirement.item }} deleted'); }" 
+                    class="text-danger">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+{% endblock table%}
+
+{% block form %}
+    <h4 class="d-flex justify-content-center mb-4 pt-4 pb-3" style="color: #2E3944; border-bottom: 1px solid rgb(230,230,230);">Add a New Recipe</h4>
+    <form method="post" action="{% url 'add_recipe' %}" class="row row-cols-lg-auto g-3 align-items-center">
+        {% csrf_token %}
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">Menu Item:</span>
+                <input type="text" id="item" name="item" class="form-control" required>
             </div>
         </div>
-    </nav>
-    <div class="mt-5 p-3">
-        <table class="table table-striped" style="border: 2px solid black;">
-            <thead>
-                <tr>
-                    <th colspan="6">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <span class="fs-4">RECIPE REQUIREMENTS</span>
-                            <a class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#addRecipeForm">
-                                <i class="bi bi-plus-circle"></i>
-                            </a>
-                        </div>
-                    </th>
-                </tr>
-                <tr>
-                    <th scope="col">Recipe</th>
-                    <th scope="col">Edit</th>
-                    <th scope="col">Delete</th>
-                </tr>
-            </thead>
-            <tbody class="table-group-divider">
-                {% for requirement in recipe %}
-                <tr>
-                    <td class="text-capitalize">{{requirement.item}} requires {{requirement.quantity}} {{requirement.unit}} of {{requirement.ingredient}}</td>
-                    <td>
-                        <a href="{% url 'edit_recipe' requirement.id %}" 
-                        onclick="alert('Edit {{ requirement.item }}');" 
-                        class="text-success me-2">
-                            <i class="bi bi-pencil"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{% url 'delete_recipe' requirement.id %}" onclick="if(confirm('Are you sure you want to delete this item?')) { alert('{{ requirement.item }} deleted'); }" 
-                        class="text-danger">
-                            <i class="bi bi-trash"></i>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="offcanvas offcanvas-end text-bg-light" tabindex="-1" id="addRecipeForm">
-        <div>
-            {% include 'forms/inventory/recipeform.html' %}
+
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">Ingredient:</span>
+                <input type="text" id="ingredint" name="ingredient" class="form-control" required>
+            </div>
         </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
-</html>
+
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">Quantity:</span>
+                <input type="number" id="quantity" name="quantity" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">Unit:</span>
+                <input type="text" id="unit" name="unit" class="form-control" placeholder="e.g. ounces" required>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">Unit Price:</span>
+                <span class="input-group-text">$</span>
+                <input type="decimal" id="ingredient_price" name="ingredient_price" class="form-control" placeholder="0.00" required>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+{% endblock form %}

@@ -107,7 +107,7 @@
                                         <div class="text-capitalize fs-6" style="margin-left: 15px; color: red;">{{ ingredient.name }}</div>
                                         {% elif ingredient.quantity <= 20 and ingredient.unit == "ounces" %}
                                         <div class="text-capitalize fs-6" style="margin-left: 15px; color: red;">{{ ingredient.name }}</div>
-                                        {% elif ingredient.quantity <= 100 and ingredient.unit == "grams" %}
+                                        {% elif ingredient.quantity < 100 and ingredient.unit == "grams" %}
                                         <div class="text-capitalize fs-6" style="margin-left: 15px; color: red;">{{ ingredient.name }}</div>
                                     {% endif %}
                                 {% endfor %}
@@ -131,7 +131,7 @@
                 <!--start of table-->
                 <div class="row justify-content-center">
                     <div class="col-md-8 mt-4">
-                        <table class="shadow table table-striped" style="border: 1px solid black;">
+                        <table class="table table-striped" style="border: 1px solid black; box-shadow: 7px 7px 7px rgb(0,0,0,0.25);">
                             {% block table%}
                             <thead>
                                 <tr>
