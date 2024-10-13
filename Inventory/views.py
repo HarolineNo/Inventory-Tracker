@@ -8,6 +8,7 @@ from .forms import*
 
 # Create your views here.
 
+
 class InventoryView(ListView):
     model = Ingredient
     template_name = 'inventory/inventory.html'
@@ -27,6 +28,11 @@ class PurchaseView(ListView):
     model = Purchase
     template_name = 'inventory/purchase.html'
     context_object_name = 'purchases'
+
+class DashboardView(ListView):
+    model = Dashboard
+    template_name = 'inventory/dashboard.html'
+    context_object_name = 'dashboard'
 
 def add_ingredient(request):
     if request.method == "POST":

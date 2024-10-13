@@ -3,6 +3,7 @@ from Inventory.views import*
 from .apiViews import*
 
 urlpatterns = [
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('ingredients/', InventoryView.as_view(), name='ingredients_list'),
     path('menu/', MenuView.as_view(), name='menu_items'),
     path('recipes/', RecipeView.as_view(), name='recipe_requirements'),

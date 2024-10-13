@@ -37,3 +37,9 @@ class Purchase(models.Model):
     def __str__(self):
         return f"{self.item} was purchased on {self.timestamp}"
     
+class Dashboard(models.Model):
+    name = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.name
+    
