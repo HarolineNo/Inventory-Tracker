@@ -34,6 +34,30 @@ class DashboardView(ListView):
     template_name = 'inventory/dashboard.html'
     context_object_name = 'dashboard'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        total_cost = 0 
+        total_revenue = 0
+
+        ingredients = Ingredient.objects.all()
+        purchases = Purchase.objects.all()
+        recipe = RecipeRequirement.objects.all()
+
+        for purchase in purchases:
+            for requirement in recipe: 
+                total_cost += requirement.ingredient_price * requirement.quantity 
+
+        for purchase in purchases:
+            total_revenue += purchase.cost  
+
+        profit = total_revenue - total_cost
+
+        context['total_cost'] = total_cost
+        context['total_revenue'] = total_revenue
+        context['profit'] = profit
+        return context
+
+
 def add_ingredient(request):
     if request.method == "POST":
         ingredient = Ingredient(
@@ -109,66 +133,6 @@ def delete_purchase(request, id):
      obj.delete()
      return redirect('purchase_log')
 
-def edit_menu(request, id):
-     obj = MenuItem.objects.get(id=id)
-     menudict = {
-          'item' : obj.item,
-          'price' : obj.price,
-          'id' : id
-     }
-     return render(request,'forms/inventory/edit_menu_form.html', context=menudict)
-
-def edit_item(request, id):
-     obj = Ingredient.objects.get(id=id)
-     ingredientdict = {
-          'name' : obj.name,
-          'quantity' : obj.quantity,
-          'unit' : obj.unit,
-          'unit_price' : obj.unit_price,
-          'id' : id
-     }
-     return render(request,'forms/inventory/edit.html', context=ingredientdict)
-
-def update(request, id):
-     obj = Ingredient.objects.get(id=id)
-     obj.name = request.POST['name']
-     obj.quantity = request.POST['quantity']
-     obj.unit = request.POST['unit']
-     obj.unit_price = request.POST['unit_price']
-     obj.save()
-     return redirect('ingredients_list')
-
-def update_menu(request, id):
-     if request.method == "POST":
-        obj = MenuItem.objects.get(id=id)
-        obj.item = request.POST['item']
-        obj.price = request.POST['price']
-        obj.save()
-        return redirect('menu_items')
-     return render(request, 'menu_items')
-
-def edit_recipe(request, id):
-     obj = RecipeRequirement.objects.get(id=id)
-     recipedict = {
-          'item' : obj.item,
-          'ingredient' : obj.ingredient,
-          'quantity' : obj.quantity,
-          'unit' : obj.unit,
-          'ingredient_price' : obj.ingredient_price,
-          'id' : id
-     }
-     return render(request,'forms/inventory/edit_recipe_form.html', context=recipedict)
-
-def update_recipe(request, id):
-     obj = RecipeRequirement.objects.get(id=id)
-     obj.item = request.POST['item']
-     obj.ingredient = request.POST['ingredient']
-     obj.quantity = request.POST['quantity']
-     obj.unit = request.POST['unit']
-     obj.ingredient_price = request.POST['ingredient_price']
-     obj.save()
-     return redirect('recipe_requirements')
-
 def make_purchase(request, id, quantity):
     ingredient = Ingredient.objects.get(id=id)
 
@@ -180,18 +144,3 @@ def make_purchase(request, id, quantity):
     else:
         messages.error(request, f'Insufficient stock for {ingredient.name}. {ingredient.quantity}{ingredient.unit} available.')
     return redirect('purchase_log')
-
-def money(request):
-    total_cost = sum(ingredient.unit_price * ingredient.quantity for ingredient in Ingredient.objects.all())
-
-    total_revenue = sum(purchase.menu_item.price * purchase.quantity for purchase in Purchase.objects.all())
-
-    profit = total_revenue - total_cost
-
-    total_money = {
-        'total_cost': total_cost,
-        'total_revenue': total_revenue,
-        'profit': profit,
-        'ingredients': Ingredient.objects.all(),
-    }
-    return render(request, 'inventory.html', total_money)

@@ -11,9 +11,9 @@ def edit_inventory(request):
 
 @csrf_exempt
 def save_inventory(request):
-    id=request.Post.get('id','')
-    type=request.Post.get('type','')
-    value=request.Post.get('value','')
+    id=request.POST.get('id','')
+    type=request.POST.get('type','')
+    value=request.POST.get('value','')
     ingredient=Ingredient.objects.get(id=id)
     if type == "name":
         ingredient.name = value
@@ -24,4 +24,4 @@ def save_inventory(request):
     if type == "unit_price":
         ingredient.unit_price = value
     ingredient.save()
-    return JsonResponse({"Success": "Updateed"})
+    return JsonResponse({"Success": "Updated"})

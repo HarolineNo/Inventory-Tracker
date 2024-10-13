@@ -16,12 +16,6 @@ urlpatterns = [
     path('delete-menu/<int:id>/', delete_item, name='delete_menu'),
     path('delete-recipe/<int:id>/', delete_recipe, name='delete_recipe'),
     path('delete-purchase/<int:id>/', delete_purchase, name='delete_purchase'),
-    path('edit-item/<int:id>/', edit_item, name='edit_item'),
-    path('update/<int:id>/', update, name='update'),
-    path('edit-menu/<int:id>/', edit_menu, name='edit_menu'),
-    path('update_menu/<int:id>/', update_menu, name='update_menu'),
-    path('edit-recipe/<int:id>/', edit_recipe, name='edit_recipe'),
-    path('update_recipe/<int:id>/', update_recipe, name='update_recipe'),
     path('purchase/<int:ingredient_id>/<int:quantity>/', make_purchase, name='make_purchase'),
     path('save_inventory', save_inventory, name='save_inventory')
 ]

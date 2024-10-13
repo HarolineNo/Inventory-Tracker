@@ -97,18 +97,18 @@
                 <div class="mb-5 container-fluid">
                     <div class="row justify-content-around">
                         <div id="boxes" class="d-flex col-md-3 align-items-center fs-5">
-                            <i class="bi bi-box-seam" style="margin-right: 10px; margin-left: 10px;"></i>Total Ingredients: <span class="fs-5" style="color: red; margin-left: 15px;">{{ ingredients.count }}</span>
+                            <i class="bi bi-box-seam" style="margin-right: 10px; margin-left: 10px;"></i>Total Ingredients: <span class="fs-5" style="margin-left: 15px;">{{ ingredients.count }}</span>
                         </div>
                         <div id="boxes" class="d-flex col-md-3 align-items-center fs-5">
                             <i class="bi bi-box-seam" style="margin-right: 5px; margin-left: 10px;"></i>Low Stock: 
                             <div>
                                 {% for ingredient in ingredients %}
                                     {% if ingredient.quantity <= 10 %}
-                                        <div class="text-capitalize fs-6" style="margin-left: 15px; color: red;">{{ ingredient.name }}</div>
+                                        <div class="text-capitalize fs-6" style="margin-left: 15px;">{{ ingredient.name }}</div>
                                         {% elif ingredient.quantity <= 20 and ingredient.unit == "ounces" %}
-                                        <div class="text-capitalize fs-6" style="margin-left: 15px; color: red;">{{ ingredient.name }}</div>
+                                        <div class="text-capitalize fs-6" style="margin-left: 15px;">{{ ingredient.name }}</div>
                                         {% elif ingredient.quantity < 100 and ingredient.unit == "grams" %}
-                                        <div class="text-capitalize fs-6" style="margin-left: 15px; color: red;">{{ ingredient.name }}</div>
+                                        <div class="text-capitalize fs-6" style="margin-left: 15px">{{ ingredient.name }}</div>
                                     {% endif %}
                                 {% endfor %}
                             </div>
@@ -118,7 +118,7 @@
                             <div>
                                 {% for ingredient in ingredients %}
                                     {% if ingredient.quantity <= 0 %}
-                                        <div class="text-capitalize fs-5" style="margin-left: 15px; color: red;">{{ ingredient.name }}</div>
+                                        <div class="text-capitalize fs-5" style="margin-left: 15px;">{{ ingredient.name }}</div>
                                     {% endif %}
                                 {% endfor %}
                             </div>
@@ -197,7 +197,7 @@
                                 </div>
                     
                                 <div class="col-12 mb-4">
-                                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(blue,darkblue);">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </form>
                             {% endblock form %}
@@ -207,6 +207,7 @@
             </div>    
         </div>
     </div>
+    <!--edits are not saving-->
     {% block custom_js %}
         <script>
             $(document).ready(function(){
@@ -224,7 +225,7 @@
                 });
 
                 $(document).on("blur",".input-data",function(){
-                    var value=$(this).val();
+                    var newValue=$(this).val();
                     var td=$(this).parent("td");
                     $(this).remove();
                     td.html(value);
@@ -254,10 +255,10 @@
                         type:"POST",
                         data:{id:id,type:type,value:value},
                     })
-                    .done(function(response){
+                    .done(function(response) {
                         console.log(response);
                     })
-                    .fail(function(){
+                    .fail(function() {
                     console.log("Error Occured");
                     });
 
