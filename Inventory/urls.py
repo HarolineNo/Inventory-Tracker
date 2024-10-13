@@ -1,5 +1,6 @@
 from django.urls import path
 from Inventory.views import* 
+from .apiViews import*
 
 urlpatterns = [
     path('ingredients/', InventoryView.as_view(), name='ingredients_list'),
@@ -20,5 +21,6 @@ urlpatterns = [
     path('update_menu/<int:id>/', update_menu, name='update_menu'),
     path('edit-recipe/<int:id>/', edit_recipe, name='edit_recipe'),
     path('update_recipe/<int:id>/', update_recipe, name='update_recipe'),
-    path('purchase/<int:ingredient_id>/<int:quantity>/', make_purchase, name='make_purchase')
+    path('purchase/<int:ingredient_id>/<int:quantity>/', make_purchase, name='make_purchase'),
+    path('save_inventory', save_inventory, name='save_inventory')
 ]
