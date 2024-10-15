@@ -47,9 +47,9 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">Ingredient:</span>
-                <select name="ingredient_name" class="form-control" required>
+                <select name="ingredient_name" class="form-control" id="ingredientName" required onchange="updatePrice()" required>
                     {% for ingredient in ingredients %}
-                        <option value="{{ ingredient.id }}">{{ ingredient.name }}</option>
+                        <option value="{{ ingredient.id }}" data-price="{{ ingredient.unit_price }}" data-unit="{{ ingredient.unit }}">{{ ingredient.name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -65,7 +65,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">Unit:</span>
-                <input type="text" id="unit" name="unit" class="form-control" placeholder="e.g. ounces" required>
+                <input type="text" id="ingredient_unit" name="unit" class="form-control" required readonly>
             </div>
         </div>
 
@@ -73,11 +73,7 @@
             <div class="input-group">
                 <span class="input-group-text">Unit Price:</span>
                 <span class="input-group-text">$</span>
-                <select name="ingredient_quantity" class="form-control" required>
-                    {% for ingredient in ingredients %}
-                        <option value="{{ ingredient.id }}">{{ ingredient.quantity }}</option>
-                    {% endfor %}
-                </select>
+                <input type="decimal" id="ingredient_price" name="ingredient_price" class="form-control" required readonly>
             </div>
         </div>
 
@@ -85,4 +81,23 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </form>
+
+    <script>
+        function updatePrice() {
+            const ingredientSelect = document.getElementById('ingredientName');
+            const ingredientPriceInput = document.getElementById('ingredient_price');
+            const ingredientUnitInput = document.getElementById('ingredient_unit');
+            const selectedOption = ingredientSelect.options[ingredientSelect.selectedIndex];
+
+            if (selectedOption.value) {
+                const price = selectedOption.getAttribute('data-price');
+                ingredientPriceInput.value = price;  
+                const unit = selectedOption.getAttribute('data-unit');
+                ingredientUnitInput.value = unit;  
+            } else {
+                ingredientPriceInput.value = ''; 
+                ingredientUnitInput.value = '';  
+            }
+        }
+    </script>
 {% endblock form %}
