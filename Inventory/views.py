@@ -43,12 +43,12 @@ class DashboardView(ListView):
         purchases = Purchase.objects.all()
         recipe = RecipeRequirement.objects.all()
 
+        #fix calculationS
         for purchase in purchases:
             for requirement in recipe: 
                 total_cost += requirement.ingredient_price * requirement.quantity 
 
-        for purchase in purchases:
-            total_revenue += purchase.cost  
+        total_revenue = purchases.aggregate(Sum('cost'))['cost__sum'] or 0  
 
         profit = total_revenue - total_cost
 

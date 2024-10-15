@@ -225,7 +225,7 @@
                 });
 
                 $(document).on("blur",".input-data",function(){
-                    var newValue=$(this).val();
+                    var value=$(this).val();
                     var td=$(this).parent("td");
                     $(this).remove();
                     td.html(value);
@@ -255,10 +255,10 @@
                         type:"POST",
                         data:{id:id,type:type,value:value},
                     })
-                    .done(function(response) {
+                    .done(function(response){
                         console.log(response);
                     })
-                    .fail(function() {
+                    .fail(function(){
                     console.log("Error Occured");
                     });
 
