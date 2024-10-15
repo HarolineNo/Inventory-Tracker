@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     unit = models.CharField(max_length=50)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -20,8 +20,8 @@ class MenuItem(models.Model):
         return self.item
 
 class RecipeRequirement(models.Model):
-    item = models.CharField(max_length=50)
-    ingredient = models.CharField(max_length=50)
+    item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     quantity = models.DecimalField(max_digits=10, decimal_places=0)
     unit = models.CharField(max_length=50, default='units')
     ingredient_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
