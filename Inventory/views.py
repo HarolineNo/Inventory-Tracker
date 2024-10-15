@@ -45,14 +45,12 @@ class DashboardView(ListView):
         total_cost = 0 
         total_revenue = 0
 
-        ingredients = Ingredient.objects.all()
         purchases = Purchase.objects.all()
         recipe = RecipeRequirement.objects.all()
 
         #fix calculationS
-        for purchase in purchases:
-            for requirement in recipe: 
-                total_cost += requirement.ingredient_price * requirement.quantity 
+        for requirement in recipe: 
+            total_cost += requirement.ingredient_price * requirement.quantity 
 
         for purchase in purchases:
             total_revenue += purchase.cost  
@@ -89,12 +87,15 @@ def add_item(request):
 
 def add_recipe(request):
     if request.method == "POST":
-        menu_item = MenuItem.objects.get(id=request.POST['menu_item'])  
-        ingredient = Ingredient.objects.get(id=request.POST['ingredient'])
+        ingredient_id = request.POST.get('ingredient')  
+        menu_id = request.POST.get('item') 
+
+        ingredient_name = Ingredient.objects.get(id=ingredient_id)
+        menu_item = MenuItem.objects.get(id=menu_id)
 
         recipe = RecipeRequirement(
-            item=request.POST['item'],
-            ingredient=request.POST['ingredient'],
+            item=menu_item,
+            ingredient=ingredient_name,
             quantity=request.POST['quantity'],
             unit=request.POST['unit'],
             ingredient_price=request.POST['ingredient_price']

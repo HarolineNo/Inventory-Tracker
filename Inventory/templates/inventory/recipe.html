@@ -36,7 +36,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">Menu Item:</span>
-                <select name="menu_item" class="form-control" required>
+                <select name="item" class="form-control" required>
                     {% for food in menu %}
                         <option value="{{ food.id }}">{{ food.item }}</option>
                     {% endfor %}
@@ -47,7 +47,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">Ingredient:</span>
-                <select name="ingredient_name" class="form-control" id="ingredientName" required onchange="updatePrice()" required>
+                <select name="ingredient" class="form-control" id="ingredientName" onchange="updatePrice()" required>
                     {% for ingredient in ingredients %}
                         <option value="{{ ingredient.id }}" data-price="{{ ingredient.unit_price }}" data-unit="{{ ingredient.unit }}">{{ ingredient.name }}</option>
                     {% endfor %}
