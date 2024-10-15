@@ -24,6 +24,12 @@ class RecipeView(ListView):
     template_name = 'inventory/recipe.html'
     context_object_name = 'recipe'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = MenuItem.objects.all()
+        context['ingredients'] = Ingredient.objects.all()  
+        return context
+
 class PurchaseView(ListView):
     model = Purchase
     template_name = 'inventory/purchase.html'
@@ -48,7 +54,8 @@ class DashboardView(ListView):
             for requirement in recipe: 
                 total_cost += requirement.ingredient_price * requirement.quantity 
 
-        total_revenue = purchases.aggregate(Sum('cost'))['cost__sum'] or 0  
+        for purchase in purchases:
+            total_revenue += purchase.cost  
 
         profit = total_revenue - total_cost
 
@@ -82,6 +89,9 @@ def add_item(request):
 
 def add_recipe(request):
     if request.method == "POST":
+        menu_item = MenuItem.objects.get(id=request.POST['menu_item'])  
+        ingredient = Ingredient.objects.get(id=request.POST['ingredient'])
+
         recipe = RecipeRequirement(
             item=request.POST['item'],
             ingredient=request.POST['ingredient'],

@@ -36,14 +36,22 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">Menu Item:</span>
-                <input type="text" id="item" name="item" class="form-control" required>
+                <select name="menu_item" class="form-control" required>
+                    {% for food in menu %}
+                        <option value="{{ food.id }}">{{ food.item }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
 
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">Ingredient:</span>
-                <input type="text" id="ingredint" name="ingredient" class="form-control" required>
+                <select name="ingredient_name" class="form-control" required>
+                    {% for ingredient in ingredients %}
+                        <option value="{{ ingredient.id }}">{{ ingredient.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
 
@@ -65,7 +73,11 @@
             <div class="input-group">
                 <span class="input-group-text">Unit Price:</span>
                 <span class="input-group-text">$</span>
-                <input type="decimal" id="ingredient_price" name="ingredient_price" class="form-control" placeholder="0.00" required>
+                <select name="ingredient_quantity" class="form-control" required>
+                    {% for ingredient in ingredients %}
+                        <option value="{{ ingredient.id }}">{{ ingredient.quantity }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
 
