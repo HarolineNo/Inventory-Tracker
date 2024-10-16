@@ -84,7 +84,7 @@ def add_item(request):
     if request.method == "POST":
         menu = MenuItem(
             item=request.POST['item'],
-            price=request.POST['price'],
+            price=request.POST['price']
         )
         menu.save()  
         return redirect('menu_items')

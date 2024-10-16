@@ -20,7 +20,7 @@
             <tr>
                 <td class="text-capitalize editable" data.id="{{ purchase.id }}" data-type="item">{{purchase.item}} was purchased {{ purchase.timestamp}} for ${{ purchase.cost }}.</td>
                 <td>
-                    <a href="{% url 'delete_recipe' purchase.id %}" onclick="if(confirm('Are you sure you want to delete this item?')) { alert('{{ requirement.item }} deleted'); }" 
+                    <a href="{% url 'delete_purchase' purchase.id %}" onclick="if(confirm('Are you sure you want to delete this item?')) { alert('{{ requirement.item }} deleted'); }" 
                     class="text-danger">
                         <i class="bi bi-trash"></i>
                     </a>
