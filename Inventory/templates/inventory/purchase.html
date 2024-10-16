@@ -87,12 +87,12 @@
             const itemIngredient = document.getElementById('ingredient');
             const itemQuantity = document.getElementById('quantity');
             const selectedOption = itemSelect.options[itemSelect.selectedIndex];
-    
+        
             if (selectedOption.value) {
                 const price = selectedOption.getAttribute('data-price');
-                itemCost.value = cost;
-                const unit_price = selectedOption.getAttribute('data-unit-price');
-                itemUnitPrice.value = unit_price;
+                itemPrice.value = price;
+                const unitPrice = selectedOption.getAttribute('data-unit');
+                itemUnitPrice.value = unitPrice;
                 const ingredient = selectedOption.getAttribute('data-ingredient');
                 itemIngredient.value = ingredient;
                 const quantity = selectedOption.getAttribute('data-quantity');
@@ -103,6 +103,6 @@
                 itemIngredient.value = '';
                 itemUnitPrice.value = '';
             }
-        }
+        }        
     </script>
 {% endblock form %}
