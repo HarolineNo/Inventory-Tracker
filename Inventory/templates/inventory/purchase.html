@@ -31,15 +31,15 @@
 {% endblock table%}
 
 {% block form %}
-    <h4 class="d-flex justify-content-center mb-4 pt-4 pb-3" style="color: #2E3944; border-bottom: 1px solid rgb(230,230,230);">Add a New Menu Item</h4>
+    <h4 class="d-flex justify-content-center mb-4 pt-4 pb-3" style="color: #2E3944; border-bottom: 1px solid rgb(230,230,230);">Add a New Purchase</h4>
     <form method="post" action="{% url 'add_purchase' %}" class="row row-cols-lg-auto g-3 align-items-center">
         {% csrf_token %}
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">Purchase Item:</span>
                 <select name="item" class="form-control" id="itemName" onchange="updatePrice()" required>
-                    {% for food in menu %}
-                        <option value="{{ food.id }}" data-cost="{{ food.cost }}">{{ food.item }}</option>
+                    {% for requirement in recipe %}
+                        <option value="{{ requirement.id }}" data-ingredient="{{ requirement.ingredient }}" data-unit="{{ requirement.ingredient_price }}" data-quantity="{{ requirement.quantity }}">{{ requirement.item }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -49,26 +49,60 @@
             <div class="input-group">
                 <span class="input-group-text">Price:</span>
                 <span class="input-group-text">$</span>
-                <input type="decimal" id="cost" name="cost" class="form-control" placeholder="0.00" required>
+                <input type="decimal" id="price" name="price" class="form-control" required readonly>
             </div>
         </div>
+
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">Ingredient:</span>
+                <input type="text" id="ingredient" name="ingredient" class="form-control" required readonly>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">Unit Price:</span>
+                <input type="number" id="unit_price" name="unit_price" class="form-control" required readonly>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">Quantity:</span>
+                <input type="text" id="quantity" name="quantity" class="form-control" required readonly>
+            </div>
+        </div>
+
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </form>
-{% endblock form %}
 
-<script>
-    function updatePrice() {
-        const itemSelect = document.getElementById('itemName');
-        const itemCost = document.getElementById('cost');
-        const selectedOption = itemSelect.options[itemSelect.selectedIndex];
-
-        if (selectedOption.value) {
-            const cost = selectedOption.getAttribute('data-cost');
-            itemCost.value = cost;  
-        } else {
-            itemCost.value = ''; 
+    <script>
+        function updatePrice() {
+            const itemSelect = document.getElementById('itemName');
+            const itemPrice = document.getElementById('price');
+            const itemUnitPrice = document.getElementById('unit_price');
+            const itemIngredient = document.getElementById('ingredient');
+            const itemQuantity = document.getElementById('quantity');
+            const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+    
+            if (selectedOption.value) {
+                const price = selectedOption.getAttribute('data-price');
+                itemCost.value = cost;
+                const unit_price = selectedOption.getAttribute('data-unit-price');
+                itemUnitPrice.value = unit_price;
+                const ingredient = selectedOption.getAttribute('data-ingredient');
+                itemIngredient.value = ingredient;
+                const quantity = selectedOption.getAttribute('data-quantity');
+                itemQuantity.value = quantity;
+            } else {
+                itemPrice.value = ''; 
+                itemQuantity.value = '';
+                itemIngredient.value = '';
+                itemUnitPrice.value = '';
+            }
         }
-    }
-</script>
+    </script>
+{% endblock form %}

@@ -36,6 +36,13 @@ class PurchaseView(ListView):
     template_name = 'inventory/purchase.html'
     context_object_name = 'purchases'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = MenuItem.objects.all() 
+        context['ingredients'] = Ingredient.objects.all() 
+        context['recipe'] = RecipeRequirement.objects.all() 
+        return context
+
 class DashboardView(ListView):
     model = Dashboard
     template_name = 'inventory/dashboard.html'
@@ -111,8 +118,19 @@ def add_recipe(request):
 
 def add_purchase(request):
     if request.method == "POST":
+        ingredient_id = request.POST.get('ingredient')  
+        menu_id = request.POST.get('item') 
+        recipe_id = request.POST.get('recipe')
+
+
+        ingredient_name = Ingredient.objects.get(id=ingredient_id)
+        menu_item = MenuItem.objects.get(id=menu_id) 
+        recipe_item = MenuItem.objects.get(id=recipe_id) 
+
         purchase = Purchase(
-            item=request.POST['item'],
+            quantity=recipe_item,
+            ingredient=ingredient_name,
+            item=menu_item,
             cost=request.POST['cost'],
         )
         purchase.save()  
