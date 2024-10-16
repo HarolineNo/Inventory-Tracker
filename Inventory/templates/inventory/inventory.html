@@ -152,6 +152,8 @@
                                     <td class="editable" data-id="{{ ingredient.id }}" data-type="quantity">{{ ingredient.quantity }}</td>
                                     <td class="editable" data-id="{{ ingredient.id }}" data-type="unit">{{ ingredient.unit }}</td>
                                     <td class="editable" data-id="{{ ingredient.id }}" data-type="unit_price">${{ ingredient.unit_price }}</td>
+                                    <td>{{ ingredient.date_purchased }}</td>
+                                    <td>{{ ingredient.expiration_date }}</td>
                                     <td>
                                         <a href="{% url 'delete_item' ingredient.id %}" onclick="if(confirm('Are you sure you want to delete this item?')) { alert('{{ ingredient.name }} deleted'); }" 
                                         class="text-danger">
@@ -174,7 +176,7 @@
                                 <div class="col-12">
                                     <div class="input-group">
                                         <span class="input-group-text">Ingredient Name:</span>
-                                        <select name="name" class="form-control" required>
+                                        <select name="category" class="form-control" required>
                                             <option>Sauces and Seasonings</option>
                                             <option>Grains</option>
                                             <option>Bakery</option>
@@ -219,14 +221,14 @@
                                 <div class="col-12">
                                     <div class="input-group">
                                         <span class="input-group-text">Date Purchesed:</span>
-                                        <input type="date" id="purchase_date" name="purchase_date" class="form-control" required>
+                                        <input type="date" id="date_purchased" name="date_purchased" class="form-control" required>
                                     </div>
                                 </div>
 
                                 <div class="col-12">
                                     <div class="input-group">
                                         <span class="input-group-text">Use-By Date:</span>
-                                        <input type="date" id="expiration" name="expiration" class="form-control" required>
+                                        <input type="date" id="expiration_date" name="expiration_date" class="form-control" required>
                                     </div>
                                 </div>
                     

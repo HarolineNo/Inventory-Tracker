@@ -68,13 +68,13 @@ class DashboardView(ListView):
 def add_ingredient(request):
     if request.method == "POST":
         ingredient = Ingredient(
-            category=request.POST['category'],
+            category=request.POST.get('category', False),
             name=request.POST['name'],
             quantity=request.POST['quantity'],
             unit=request.POST['unit'],
             unit_price=request.POST['unit_price'],
-            date_purchased=request.POST['date_purchased'],
-            expiration_date=request.POST['expiration_date']
+            date_purchased=request.POST.get('date_purchased'),
+            expiration_date=request.POST.get('expiration_date')
         )
         ingredient.save()  
         return redirect('ingredients_list')
