@@ -1,14 +1,12 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from Inventory.models import*
-from django.db.models import Sum, F, FloatField
+from django.db.models import Sum, F, FloatField, Count
 from .models import Ingredient
 from django.contrib import messages
 from .forms import*
-from django.db.models import Count
 
 # Create your views here.
-
 
 class InventoryView(ListView):
     model = Ingredient
@@ -50,7 +48,6 @@ class DashboardView(ListView):
         context = super().get_context_data(**kwargs)
         total_cost = 0 
         total_revenue = 0
-        purchase_count = Purchase.objects.values('item').annotate(count=Count('item'))
 
         purchases = Purchase.objects.all()
 
@@ -62,7 +59,10 @@ class DashboardView(ListView):
 
         profit = total_revenue - total_cost
 
-        context['purchase_count'] = purchase_count
+        item_count = purchases.values('item').annotate(count=Count('item'))
+
+        context['purchase_count'] = purchases.count()
+        context['item_count'] = item_count
         context['total_cost'] = total_cost
         context['total_revenue'] = total_revenue
         context['profit'] = profit

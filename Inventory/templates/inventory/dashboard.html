@@ -20,43 +20,115 @@
         </div>
     </div>
 {% endblock stock %}
-{% block table %}{% endblock table%}
-{% block form %}
-    <!--Doughnut chart for Sales/Revenue/Profit-->
-    <div>
-        <canvas id="myChart"></canvas>
-    </div>
+{% block table %}
+    <div class="row">
+        <!--Doughnut chart for Sales/Revenue/Profit-->
+        <div class="col-md-4">
+            <div>
+                <canvas id="doughnutChart"></canvas>
+            </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script>
-        const ctx = document.getElementById('myChart');
-        
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-            labels: ['Total Cost', 'Total Revenue', 'Total Profit'],
-            datasets: [{
-                label: 'Financial Metrics',
-                data: [{{ total_cost }},{{ total_revenue }},{{ profit }}],
-                borderWidth: 1
-            }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                    position: 'top',
+            <script>
+                const ctxDoughnut = document.getElementById('doughnutChart');
+                
+                new Chart(ctxDoughnut, {
+                    type: 'doughnut',
+                    data: {
+                    labels: ['Total Cost', 'Total Revenue', 'Total Profit'],
+                    datasets: [{
+                        label: 'Financial Metrics',
+                        data: [{{ total_cost }},{{ total_revenue }},{{ profit }}],
+                        borderWidth: 1
+                    }]
                     },
-                    title: {
-                        display: true,
-                        text: 'Cost vs. Revenue vs. Profit'
-                    }
-                }
-            },
-        });
-    </script>  
-{% endblock form %}
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                            position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Cost vs. Revenue vs. Profit'
+                            }
+                        }
+                    },
+                });
+            </script> 
+        </div>
+
+        <div class="col-md-4">
+            <!--Line chart for Sales-->
+            <div>
+                <canvas id="lineChart"></canvas>
+            </div>
+            <script>
+                const ctxLine = document.getElementById('lineChart');
+                
+                new Chart(ctxLine, {
+                    type: 'line',
+                    data: {
+                    labels: ['# of Sales'],
+                    datasets: [{
+                        label: '# of Sales',
+                        data: [{{ purchase_count }}],
+                        borderWidth: 1
+                    }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                            position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Sales per Day'
+                            }
+                        }
+                    },
+                });
+            </script>  
+        </div>
+
+        <div class="col-md-4">
+            <!--bar chart for Products-->
+            <div>
+                <canvas id="barChart"></canvas>
+            </div>
+            <script>
+                const ctxBar = document.getElementById('barChart');
+                
+                new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                    labels: [{% for item in item_count %}'{{ item.item }}'{% endfor %}],
+                    datasets: [{
+                        label: '# of Sales',
+                        data: [{% for item in item_count %}{{ item.count }}{% endfor %}],
+                        borderWidth: 1
+                    }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                            position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Product Sold'
+                            }
+                        }
+                    },
+                });
+            </script>  
+        </div>
+    </div>
+{% endblock table%}
+{% block form %}{% endblock form %}
 
 <!--add chart to measure sales per day, most purchased item, and sales vs revenue vs cost-->
 <!--line graph, bar chart, pie graph-->
