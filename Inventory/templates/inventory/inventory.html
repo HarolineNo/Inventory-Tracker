@@ -135,6 +135,7 @@
                             {% block table%}
                             <thead>
                                 <tr>
+                                    <th scope="col">Category</th>
                                     <th scope="col">Item</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Unit</th>
@@ -144,6 +145,7 @@
                             <tbody class="table-group-divider">
                                 {% for ingredient in ingredients %}
                                 <tr>
+                                    <td>{{ ingredient.category }}</td>
                                     <td class="text-capitalize editable" data-id="{{ ingredient.id }}" data-type="name">{{ ingredient.name }}</td>
                                     <td class="editable" data-id="{{ ingredient.id }}" data-type="quantity">{{ ingredient.quantity }}</td>
                                     <td class="editable" data-id="{{ ingredient.id }}" data-type="unit">{{ ingredient.unit }}</td>
@@ -167,6 +169,22 @@
                             <h4 class="d-flex justify-content-center mb-4 pt-4 pb-3" style="color: #2E3944; border-bottom: 1px solid rgb(230,230,230);">Add a New Ingredient</h4>
                             <form method="post" action="{% url 'add_ingredients' %}" class="row row-cols-lg-auto g-3 align-items-center">
                                 {% csrf_token %}
+                                <div class="col-12">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Ingredient Name:</span>
+                                        <select name="name" class="form-control" required>
+                                            <option>Sauces and Seasonings</option>
+                                            <option>Grains</option>
+                                            <option>Bakery</option>
+                                            <option>Meat and Poultry</option>
+                                            <option>Dairy</option>
+                                            <option>Fruits</option>
+                                            <option>Seafood</option>
+                                            <option>Vegetables</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div class="col-12">
                                     <div class="input-group">
                                         <span class="input-group-text">Ingredient Name:</span>

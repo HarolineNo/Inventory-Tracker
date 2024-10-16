@@ -1,5 +1,4 @@
 {% extends 'inventory/inventory.html' %}
-
 {% block tile %}Dashboard{% endblock tile %}
 {% block page_title %}Dashboard{% endblock page_title %}
 
@@ -21,28 +20,39 @@
         </div>
     </div>
 {% endblock stock %}
+{% block table %}{% endblock table%}
+{% block form %}
+    <!--Stacked Bar Chart for Purchased Items-->
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
 
-{% block table %}
-    <thead>
-        <tr>
-            <th scope="col">Item</th>
-            <th scope="col">Price</th>
-            <th scope="col">Delete</th>
-        </tr>
-    <tbody class="table-group-divider">
-        {% for food in menu %}
-            <tr>
-                <td class="text-capitalize editable" data-id="{{ food.id }}" data-type="item">{{ food.item }}</td>
-                <td class="editable" data-id="{{ food.id }}" data-type="price">${{ food.price }}</td>
-                <td>
-                    <a href="{% url 'delete_item' food.id %}" onclick="if(confirm('Are you sure you want to delete this item?')) { alert('{{ food.item }} deleted'); }" 
-                    class="text-danger">
-                        <i class="bi bi-trash p-3"></i>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-{% endblock table%}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-{% block form %}{% endblock form %}
+    <script>
+        const ctx = document.getElementById('myChart');
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+            labels: [{% for purchase in purchases %}'{{ purchase.item }}'{% endfor %}],
+            datasets: [{
+                label: '# of sales',
+                data: [{{ purchase_count }}],
+                borderWidth: 1
+            }]
+            },
+            options: {
+            scales: {
+                y: {
+                beginAtZero: true
+                }
+            }
+            }
+        });
+    </script>  
+{% endblock form %}
+
+<!--add chart to measure sales per day, most purchased item, and sales vs revenue vs cost-->
+<!--line graph, bar chart, pie graph-->
+

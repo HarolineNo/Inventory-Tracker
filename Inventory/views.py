@@ -5,6 +5,7 @@ from django.db.models import Sum, F, FloatField
 from .models import Ingredient
 from django.contrib import messages
 from .forms import*
+from django.db.models import Count
 
 # Create your views here.
 
@@ -44,6 +45,7 @@ class DashboardView(ListView):
         context = super().get_context_data(**kwargs)
         total_cost = 0 
         total_revenue = 0
+        purchase_count = Purchase.objects.values('item').annotate(count=Count('item'))
 
         purchases = Purchase.objects.all()
         recipe = RecipeRequirement.objects.all()
@@ -56,6 +58,7 @@ class DashboardView(ListView):
 
         profit = total_revenue - total_cost
 
+        context['purchase_count'] = purchase_count
         context['total_cost'] = total_cost
         context['total_revenue'] = total_revenue
         context['profit'] = profit
@@ -65,6 +68,7 @@ class DashboardView(ListView):
 def add_ingredient(request):
     if request.method == "POST":
         ingredient = Ingredient(
+            category=request.POST['category'],
             name=request.POST['name'],
             quantity=request.POST['quantity'],
             unit=request.POST['unit'],
@@ -154,3 +158,4 @@ def make_purchase(request, id, quantity):
     else:
         messages.error(request, f'Insufficient stock for {ingredient.name}. {ingredient.quantity}{ingredient.unit} available.')
     return redirect('purchase_log')
+    

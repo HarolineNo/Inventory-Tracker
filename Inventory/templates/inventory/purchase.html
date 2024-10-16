@@ -37,7 +37,11 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">Purchase Item:</span>
-                <input type="text" id="item" name="item" class="form-control" required>
+                <select name="item" class="form-control" id="itemName" onchange="updatePrice()" required>
+                    {% for food in menu %}
+                        <option value="{{ food.id }}" data-cost="{{ food.cost }}">{{ food.item }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
         
@@ -53,3 +57,18 @@
         </div>
     </form>
 {% endblock form %}
+
+<script>
+    function updatePrice() {
+        const itemSelect = document.getElementById('itemName');
+        const itemCost = document.getElementById('cost');
+        const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+
+        if (selectedOption.value) {
+            const cost = selectedOption.getAttribute('data-cost');
+            itemCost.value = cost;  
+        } else {
+            itemCost.value = ''; 
+        }
+    }
+</script>

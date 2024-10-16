@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Ingredient(models.Model):
+    category = models.CharField(max_length=200, default=None)
     name = models.CharField(max_length=100)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     unit = models.CharField(max_length=50)
@@ -30,7 +31,7 @@ class RecipeRequirement(models.Model):
         return f"{self.item} requires {self.quantity} of {self.ingredient}"
 
 class Purchase(models.Model):
-    item = models.CharField(max_length=50)
+    item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
