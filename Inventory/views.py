@@ -101,16 +101,19 @@ def add_recipe(request):
     if request.method == "POST":
         ingredient_id = request.POST.get('ingredient')  
         menu_id = request.POST.get('item') 
+        menu_price_id = request.POST.get('price') 
 
         ingredient_name = Ingredient.objects.get(id=ingredient_id)
         menu_item = MenuItem.objects.get(id=menu_id)
+        menu_price = MenuItem.objects.get(id=menu_price_id)
 
         recipe = RecipeRequirement(
             item=menu_item,
             ingredient=ingredient_name,
             quantity=request.POST['quantity'],
             unit=request.POST['unit'],
-            ingredient_price=request.POST['ingredient_price']
+            ingredient_price=request.POST['ingredient_price'],
+            price=menu_price
         )
         recipe.save()
         return redirect('recipe_requirements')

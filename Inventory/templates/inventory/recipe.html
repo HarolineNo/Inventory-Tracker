@@ -36,9 +36,9 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">Menu Item:</span>
-                <select name="item" class="form-control" required>
+                <select name="item" id="itemName" onchange="updatePrice()" class="form-control" required>
                     {% for food in menu %}
-                        <option value="{{ food.id }}">{{ food.item }}</option>
+                        <option value="{{ food.id }}" data-item-price="{{ food.price }}">{{ food.item }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -47,7 +47,7 @@
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">Ingredient:</span>
-                <select name="ingredient" class="form-control" id="ingredientName" onchange="updatePrice()" required>
+                <select name="ingredient" class="form-control" id="ingredientName" onchange="updateFields()" required>
                     {% for ingredient in ingredients %}
                         <option value="{{ ingredient.id }}" data-price="{{ ingredient.unit_price }}" data-unit="{{ ingredient.unit }}">{{ ingredient.name }}</option>
                     {% endfor %}
@@ -78,12 +78,20 @@
         </div>
 
         <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">Price:</span>
+                <span class="input-group-text">$</span>
+                <input type="decimal" id="price" name="price" class="form-control" required readonly>
+            </div>
+        </div>
+
+        <div class="col-12">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </form>
 
     <script>
-        function updatePrice() {
+        function updateFields() {
             const ingredientSelect = document.getElementById('ingredientName');
             const ingredientPriceInput = document.getElementById('ingredient_price');
             const ingredientUnitInput = document.getElementById('ingredient_unit');
@@ -96,7 +104,22 @@
                 ingredientUnitInput.value = unit;  
             } else {
                 ingredientPriceInput.value = ''; 
-                ingredientUnitInput.value = '';  
+                ingredientUnitInput.value = ''; 
+            }
+        }
+    </script>
+
+    <script>
+        function updatePrice() {
+            const itemSelect = document.getElementById('itemName');
+            const itemPriceInput = document.getElementById('price');
+            const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+
+            if (selectedOption.value) {
+                const itemPrice = selectedOption.getAttribute('data-item-price');
+                itemPriceInput.value = itemPrice;  
+            } else {
+                itemPriceInput.value = ''; 
             }
         }
     </script>
