@@ -72,7 +72,9 @@ def add_ingredient(request):
             name=request.POST['name'],
             quantity=request.POST['quantity'],
             unit=request.POST['unit'],
-            unit_price=request.POST['unit_price']
+            unit_price=request.POST['unit_price'],
+            date_purchased=request.POST['date_purchased'],
+            expiration_date=request.POST['expiration_date']
         )
         ingredient.save()  
         return redirect('ingredients_list')
