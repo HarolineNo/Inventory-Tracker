@@ -22,7 +22,7 @@
 {% endblock stock %}
 {% block table %}{% endblock table%}
 {% block form %}
-    <!--Stacked Bar Chart for Purchased Items-->
+    <!--Doughnut chart for Sales/Revenue/Profit-->
     <div>
         <canvas id="myChart"></canvas>
     </div>
@@ -33,22 +33,27 @@
         const ctx = document.getElementById('myChart');
         
         new Chart(ctx, {
-            type: 'bar',
+            type: 'doughnut',
             data: {
-            labels: [{% for purchase in purchases %}'{{ purchase.item }}'{% endfor %}],
+            labels: ['Total Cost', 'Total Revenue', 'Total Profit'],
             datasets: [{
-                label: '# of sales',
-                data: [{{ purchase_count }}],
+                label: 'Financial Metrics',
+                data: [{{ total_cost }},{{ total_revenue }},{{ profit }}],
                 borderWidth: 1
             }]
             },
             options: {
-            scales: {
-                y: {
-                beginAtZero: true
+                responsive: true,
+                plugins: {
+                    legend: {
+                    position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Cost vs. Revenue vs. Profit'
+                    }
                 }
-            }
-            }
+            },
         });
     </script>  
 {% endblock form %}

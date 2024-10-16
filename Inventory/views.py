@@ -53,7 +53,6 @@ class DashboardView(ListView):
         purchase_count = Purchase.objects.values('item').annotate(count=Count('item'))
 
         purchases = Purchase.objects.all()
-        recipe = RecipeRequirement.objects.all()
 
         for purchase in purchases: 
             total_cost += purchase.unit_price * purchase.quantity 
