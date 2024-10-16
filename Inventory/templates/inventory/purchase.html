@@ -39,7 +39,7 @@
                 <span class="input-group-text">Purchase Item:</span>
                 <select name="item" class="form-control" id="itemName" onchange="updatePrice()" required>
                     {% for requirement in recipe %}
-                        <option value="{{ requirement.id }}" data-ingredient="{{ requirement.ingredient }}" data-unit="{{ requirement.ingredient_price }}" data-quantity="{{ requirement.quantity }}">{{ requirement.item }}</option>
+                        <option value="{{ requirement.id }}" data-ingredient="{{ requirement.ingredient }}" data-unit="{{ requirement.ingredient_price }}" data-quantity="{{ requirement.quantity }}" data-price="{{ requirement.price }}">{{ requirement.item }}</option>
                     {% endfor %}
                 </select>
             </div>

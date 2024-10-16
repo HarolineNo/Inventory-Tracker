@@ -38,8 +38,6 @@ class PurchaseView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['menu'] = MenuItem.objects.all() 
-        context['ingredients'] = Ingredient.objects.all() 
         context['recipe'] = RecipeRequirement.objects.all() 
         return context
 
@@ -57,8 +55,8 @@ class DashboardView(ListView):
         purchases = Purchase.objects.all()
         recipe = RecipeRequirement.objects.all()
 
-        for requirement in recipe: 
-            total_cost += requirement.ingredient_price * requirement.quantity 
+        for purchase in purchases: 
+            total_cost += purchase.unit_price * purchase.quantity 
 
         for purchase in purchases:
             total_revenue += purchase.cost  
@@ -101,11 +99,10 @@ def add_recipe(request):
     if request.method == "POST":
         ingredient_id = request.POST.get('ingredient')  
         menu_id = request.POST.get('item') 
-        menu_price_id = request.POST.get('price') 
 
         ingredient_name = Ingredient.objects.get(id=ingredient_id)
         menu_item = MenuItem.objects.get(id=menu_id)
-        menu_price = MenuItem.objects.get(id=menu_price_id)
+        menu_price = request.POST.get('price')
 
         recipe = RecipeRequirement(
             item=menu_item,
@@ -121,20 +118,16 @@ def add_recipe(request):
 
 def add_purchase(request):
     if request.method == "POST":
-        ingredient_id = request.POST.get('ingredient')  
-        menu_id = request.POST.get('item') 
-        recipe_id = request.POST.get('recipe')
-
-
-        ingredient_name = Ingredient.objects.get(id=ingredient_id)
-        menu_item = MenuItem.objects.get(id=menu_id) 
-        recipe_item = MenuItem.objects.get(id=recipe_id) 
+        recipe_item_id = request.POST.get('item')  
+        
+        recipe = RecipeRequirement.objects.get(id=recipe_item_id)
 
         purchase = Purchase(
-            quantity=recipe_item,
-            ingredient=ingredient_name,
-            item=menu_item,
-            cost=request.POST['cost'],
+            item=recipe.item, 
+            ingredient=recipe.ingredient,  
+            quantity=recipe.quantity,  
+            unit_price=recipe.ingredient_price,  
+            cost=recipe.price
         )
         purchase.save()  
         return redirect('purchase_log')
