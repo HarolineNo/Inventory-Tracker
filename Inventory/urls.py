@@ -3,6 +3,7 @@ from Inventory.views import*
 from .apiViews import*
 
 urlpatterns = [
+    path('', home, name='home'),
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('ingredients/', InventoryView.as_view(), name='ingredients_list'),
     path('menu/', MenuView.as_view(), name='menu_items'),
@@ -19,5 +20,6 @@ urlpatterns = [
     path('purchase/<int:ingredient_id>/<int:quantity>/', make_purchase, name='make_purchase'),
     path('save_inventory/', save_inventory, name='save_inventory'),
     path('save_menu/', save_menu, name='save_menu'),
-    path("accounts/", include("django.contrib.auth.urls"))
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('signup/', authView, name='signup')
 ]

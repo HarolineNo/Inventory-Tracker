@@ -5,6 +5,8 @@ from django.db.models import Sum, F, FloatField, Count
 from .models import Ingredient
 from django.contrib import messages
 from .forms import*
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -173,4 +175,18 @@ def make_purchase(request, id, quantity):
     else:
         messages.error(request, f'Insufficient stock for {ingredient.name}. {ingredient.quantity}{ingredient.unit} available.')
     return redirect('purchase_log')
-    
+
+def home(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    else:
+        return redirect('login')
+
+def authView(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+    else:
+        form = UserCreationForm()
+    return render(request, "registration/signup.html", {"form": form})

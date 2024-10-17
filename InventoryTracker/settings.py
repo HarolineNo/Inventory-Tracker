@@ -71,6 +71,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'InventoryTracker.wsgi.application'
 
+LOGIN_URL = 'accounts/login/'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -122,3 +123,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'inventory:dashboard'
+LOGIN_REDIRECT_URL = "inventory:login"
