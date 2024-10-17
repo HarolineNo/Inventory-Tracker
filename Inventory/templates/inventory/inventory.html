@@ -193,7 +193,7 @@
                                 <div class="col-12">
                                     <div class="input-group">
                                         <span class="input-group-text">Ingredient Name:</span>
-                                        <input type="text" id="name" name="name" class="form-control" required>
+                                        <input type="text" id="name" name="name" class="form-control" autocomplete="on" required>
                                     </div>
                                 </div>
                     
@@ -261,30 +261,28 @@
                     {
                         input_type="datetime-local";
                     }
-                    var input="<input type='"+input_type+"' class='input-data' value='"+value+"' class='form-control'>";
+                    var input="<input type='"+input_type+"' class='input-data' value='"+value+"' class='form-control' id='" + data_type + "_input' name='" + data_type + "'>";
                     $(this).html(input);
                     $(this).removeClass("editable")
                 });
 
-                $(document).on("blur",".input-data",function(){
-                    var value=$(this).val();
-                    var td=$(this).parent("td");
+                $(document).on("blur", ".input-data", function() {
+                    var value = $(this).val();
+                    var td = $(this).closest("td"); 
                     $(this).remove();
                     td.html(value);
                     td.addClass("editable");
-                    var type=td.data("type");
-                    sendToServer(td.data("id"),value,type);
+                    var type = td.data("type");
+                    sendToServer(td.data("id"), value, type);
                 });
-                $(document).on("keypress",".input-data",function(e){
-                    var key=e.which;
-                    if(key==13){
-                        var value=$(this).val();
-                        var td=$(this).parent("td");
+                $(document).on("keypress", ".input-data", function(e) {
+                    if (e.which == 13) {
+                        var value = $(this).val();
+                        var td = $(this).closest("td");
                         $(this).remove();
-                        td.html(value);
-                        td.addClass("editable");
-                    var type=td.data("type");
-                    sendToServer(td.data("id"),value,type);
+                        td.html(value).addClass("editable");
+                        var type = td.data("type");
+                        sendToServer(td.data("id"), value, type);
                     }
                 });
 
@@ -293,9 +291,14 @@
                     console.log(value);
                     console.log(type);
                     $.ajax({
-                        url:"save_inventory",
+                        url:"{% url 'save_inventory' %}",
                         type:"POST",
-                        data:{id:id,type:type,value:value},
+                        data: {
+                            id: id,
+                            type: type,
+                            value: value,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        }
                     })
                     .done(function(response){
                         console.log(response);
