@@ -249,7 +249,7 @@
             </div>    
         </div>
     </div>
-    <!--edits are not saving-->
+
     {% block custom_js %}
         <script>
             $(document).ready(function(){
@@ -269,9 +269,9 @@
                 $(document).on("blur", ".input-data", function() {
                     var value = $(this).val();
                     var td = $(this).closest("td"); 
-                    $(this).remove();
-                    td.html(value);
-                    td.addClass("editable");
+                    $(this).remove(); 
+                    td.html(value); 
+                    td.addClass("editable"); 
                     var type = td.data("type");
                     sendToServer(td.data("id"), value, type);
                 });
@@ -287,9 +287,6 @@
                 });
 
                 function sendToServer(id,value,type){
-                    console.log(id);
-                    console.log(value);
-                    console.log(type);
                     $.ajax({
                         url:"{% url 'save_inventory' %}",
                         type:"POST",
@@ -300,13 +297,6 @@
                             csrfmiddlewaretoken: '{{ csrf_token }}'
                         }
                     })
-                    .done(function(response){
-                        console.log(response);
-                    })
-                    .fail(function(){
-                    console.log("Error Occured");
-                    });
-
                 }
             });
         </script>

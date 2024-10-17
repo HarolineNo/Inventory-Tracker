@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from Inventory.views import* 
 from .apiViews import*
 
@@ -17,5 +17,7 @@ urlpatterns = [
     path('delete-recipe/<int:id>/', delete_recipe, name='delete_recipe'),
     path('delete-purchase/<int:id>/', delete_purchase, name='delete_purchase'),
     path('purchase/<int:ingredient_id>/<int:quantity>/', make_purchase, name='make_purchase'),
-    path('save_inventory/', save_inventory, name='save_inventory')
+    path('save_inventory/', save_inventory, name='save_inventory'),
+    path('save_menu/', save_menu, name='save_menu'),
+    path("accounts/", include("django.contrib.auth.urls"))
 ]
