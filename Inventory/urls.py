@@ -21,5 +21,6 @@ urlpatterns = [
     path('save_inventory/', save_inventory, name='save_inventory'),
     path('save_menu/', save_menu, name='save_menu'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('signup/', authView, name='signup')
+    path('signup/', authView, name='signup'),
+    path('create_account/', signup, name='create_account')
 ]

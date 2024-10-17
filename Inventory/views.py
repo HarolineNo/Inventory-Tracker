@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from Inventory.models import*
-from django.db.models import Sum, F, FloatField, Count
+from django.db.models import Count
 from .models import Ingredient
 from django.contrib import messages
 from .forms import*
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from django.db.models.functions import TruncDate
 
 # Create your views here.
 
@@ -61,13 +62,34 @@ class DashboardView(ListView):
 
         profit = total_revenue - total_cost
 
+        profit_percent = 100 * (profit/(total_revenue + total_cost + profit))
+        cost_percent = 100 * (total_cost/(total_revenue + total_cost + profit))
+        revenue_percent = 100 * (total_revenue/(total_revenue + total_cost + profit))
+
         item_count = purchases.values('item').annotate(count=Count('item'))
+
+        items = [item['item'] for item in item_count]
+        counts = [item['count'] for item in item_count]
+
+        daily_purchases = (Purchase.objects.annotate(date=TruncDate('timestamp')).values('date').annotate(count=Count('id')).order_by('date')
+        )
+        
+        purchase_date = [sale['date'] for sale in daily_purchases]
+        purchase_num = [sale['count'] for sale in daily_purchases]
 
         context['purchase_count'] = purchases.count()
         context['item_count'] = item_count
         context['total_cost'] = total_cost
         context['total_revenue'] = total_revenue
         context['profit'] = profit
+        context['profit_percent'] = profit_percent
+        context['revenue_percent'] = revenue_percent
+        context['cost_percent'] = cost_percent
+        context['item_count'] = item_count
+        context['items'] = items
+        context['counts'] = counts
+        context['purchase_date'] = purchase_date
+        context['purchase_num'] = purchase_num
         return context
 
 
@@ -190,3 +212,20 @@ def authView(request):
     else:
         form = UserCreationForm()
     return render(request, "registration/signup.html", {"form": form})
+
+def signup(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        confirm_password = request.POST['confirmPassword']
+
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('signup')  
+
+        user = User.objects.create_user(username=username, password=password)
+        login(request, user)  
+        messages.success(request, "Signup successful!")
+        return redirect('dashboard') 
+
+    return render(request, 'signup')

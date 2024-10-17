@@ -21,7 +21,7 @@
     </div>
 {% endblock stock %}
 {% block table %}
-    <div class="row">
+    <div class="col d-flex justify-content-around">
         <!--Doughnut chart for Sales/Revenue/Profit-->
         <div class="col-md-4">
             <div>
@@ -38,8 +38,8 @@
                     data: {
                     labels: ['Total Cost', 'Total Revenue', 'Total Profit'],
                     datasets: [{
-                        label: 'Financial Metrics',
-                        data: [{{ total_cost }},{{ total_revenue }},{{ profit }}],
+                        label: 'Metrics %',
+                        data: [{{ cost_percent }},{{ revenue_percent }},{{ profit_percent }}],
                         borderWidth: 1
                     }]
                     },
@@ -59,7 +59,7 @@
             </script> 
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
             <!--Line chart for Sales-->
             <div>
                 <canvas id="lineChart"></canvas>
@@ -70,22 +70,28 @@
                 new Chart(ctxLine, {
                     type: 'line',
                     data: {
-                    labels: ['# of Sales'],
-                    datasets: [{
-                        label: '# of Sales',
-                        data: [{{ purchase_count }}],
-                        borderWidth: 1
-                    }]
+                        labels: [{% for date in purchase_date %}'{{ date }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+                        datasets: [{
+                            label: '# of Sales',
+                            data: [{% for count in purchase_num %}{{ count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                            borderWidth: 1,
+                            fill: true
+                        }]
                     },
                     options: {
                         responsive: true,
                         plugins: {
                             legend: {
-                            position: 'top',
+                                position: 'top',
                             },
                             title: {
                                 display: true,
                                 text: 'Sales per Day'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
                             }
                         }
                     },
@@ -93,40 +99,44 @@
             </script>  
         </div>
 
-        <div class="col-md-4">
-            <!--bar chart for Products-->
+        <div class="col-md-6">
+            <!--Bar chart for Purchased Items-->
             <div>
                 <canvas id="barChart"></canvas>
             </div>
             <script>
                 const ctxBar = document.getElementById('barChart');
-                
                 new Chart(ctxBar, {
                     type: 'bar',
                     data: {
-                    labels: [{% for item in item_count %}'{{ item.item }}'{% endfor %}],
-                    datasets: [{
-                        label: '# of Sales',
-                        data: [{% for item in item_count %}{{ item.count }}{% endfor %}],
-                        borderWidth: 1
-                    }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                            position: 'top',
+                        labels: [{% for item in items %}'{{ item }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+                        datasets: [{
+                            label: '# of Purchases',
+                            data: [{% for count in counts %}{{ count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                            borderWidth: 1,
+                        }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Items Purchased'
+                                }
                             },
-                            title: {
-                                display: true,
-                                text: 'Product Sold'
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
                             }
-                        }
-                    },
-                });
-            </script>  
+                        },
+                    });
+                </script>  
+            </div>
         </div>
-    </div>
 {% endblock table%}
 {% block form %}{% endblock form %}
 
