@@ -147,9 +147,11 @@ def add_purchase(request):
         
         ingredient = recipe.ingredient
         
-        if ingredient.quantity >= recipe.quantity:
-            ingredient.quantity -= recipe.quantity
-            ingredient.save()
+        if ingredient.quantity < recipe.quantity:
+            return redirect('purchase_log')
+        
+        ingredient.quantity -= recipe.quantity
+        ingredient.save()
 
         purchase = Purchase(
             item=recipe.item, 
