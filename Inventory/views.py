@@ -144,6 +144,12 @@ def add_purchase(request):
         recipe_item_id = request.POST.get('item')  
         
         recipe = RecipeRequirement.objects.get(id=recipe_item_id)
+        
+        ingredient = recipe.ingredient
+        
+        if ingredient.quantity >= recipe.quantity:
+            ingredient.quantity -= recipe.quantity
+            ingredient.save()
 
         purchase = Purchase(
             item=recipe.item, 
