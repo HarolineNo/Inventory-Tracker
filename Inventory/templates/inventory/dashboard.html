@@ -58,24 +58,27 @@
                 Inventory Tracker
             </span>
             <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="main-nav">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Main Menu</h5>
+                <div class="offcanvas-header p-4">
+                    <h5 class="offcanvas-title fs-4" id="offcanvasDarkNavbarLabel">Main Menu</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="p-3">
-                    <a class="nav-link mt-3 mb-4 fs-5" href="{% url 'dashboard' %}">
+                <div class="p-4">
+                    <a class="nav-link mt-3 mb-5 fs-5" href="{% url 'dashboard' %}">
                         <i class="bi bi-house" style="margin-right: 10px;"></i>Dashboard
                     </a>
-                    <a class="nav-link mt-3 mb-4 fs-5" href="{% url 'ingredients_list' %}">
+                    <a class="nav-link mt-3 mb-5 fs-5" href="{% url 'ingredients_list' %}">
                         <i class="bi bi-table" style="margin-right: 10px;"></i>Inventory
                     </a>
-                    <a class="nav-link mb-4 fs-5" href="{% url 'menu_items' %}">
+                    <a class="nav-link mb-5 fs-5" href="{% url 'menu_items' %}">
                         <i class="bi bi-cup" style="margin-right: 10px;"></i>Menu</a>
-                    <a class="nav-link mb-4 fs-5" href="{% url 'recipe_requirements' %}">
+                    <a class="nav-link mb-5 fs-5" href="{% url 'recipe_requirements' %}">
                         <i class="bi bi-card-list" style="margin-right: 10px;"></i>Recipe
                     </a>
                     <a class="nav-link fs-5" href="{% url 'purchase_log' %}">
                         <i class="bi bi-bag" style="margin-right: 10px;"></i>Purchase
+                    </a>
+                    <a class="nav-link fs-5" href="{% url 'login' %}" style="margin-top: 55%;">
+                        <i class="bi bi-box-arrow-right" style="color: white; margin-right: 10px;"></i>Log Out
                     </a>
                 </div>
             </div>
