@@ -113,7 +113,7 @@
                     <li class="list-group-item">
                         <strong>{{ action.user.username }}</strong>
                         {{ action.action_type }} "{{ action.item }}"
-                        <em>on {{ action.timestamp|date:"Y-m-d H:i:s" }}</em>
+                        <em>on {{ action.timestamp|date:"m-d-Y H:i:s" }}</em>
                     </li>
                 {% empty %}
                     <li class="list-group-item">No recent actions found.</li>

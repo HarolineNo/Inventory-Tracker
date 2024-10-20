@@ -7,6 +7,8 @@ from django.contrib import messages
 from .forms import*
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
 from django.db.models.functions import TruncDate
 from .models import Action
 
@@ -18,10 +20,13 @@ class InventoryView(ListView):
     template_name = 'inventory/inventory.html'
     context_object_name = 'ingredients'
 
+   
+
 class MenuView(ListView):
     model = MenuItem
     template_name = 'inventory/menu.html'
     context_object_name = 'menu'
+
 
 class RecipeView(ListView):
     model = RecipeRequirement
@@ -33,7 +38,8 @@ class RecipeView(ListView):
         context['menu'] = MenuItem.objects.all()
         context['ingredients'] = Ingredient.objects.all()  
         return context
-
+    
+  
 class PurchaseView(ListView):
     model = Purchase
     template_name = 'inventory/purchase.html'
@@ -43,7 +49,8 @@ class PurchaseView(ListView):
         context = super().get_context_data(**kwargs)
         context['recipe'] = RecipeRequirement.objects.all() 
         return context
-
+    
+  
 class DashboardView(ListView):
     model = Dashboard
     template_name = 'inventory/dashboard.html'
@@ -64,17 +71,23 @@ class DashboardView(ListView):
 
         profit = total_revenue - total_cost
 
-        profit_percent = round((100 * (profit/(total_revenue + total_cost + profit))), ndigits=2)
-        cost_percent = round((100 * (total_cost/(total_revenue + total_cost + profit))), ndigits=2)
-        revenue_percent = round((100 * (total_revenue/(total_revenue + total_cost + profit))), ndigits=2)
+        total_sum = total_revenue + total_cost + profit
 
-        daily_purchases = (Purchase.objects.annotate(date=TruncDate('timestamp')).values('date').annotate(count=Count('id')).order_by('date')
+        if total_sum > 0:
+            profit_percent = round((100 * (profit / total_sum)), ndigits=2)
+            cost_percent = round((100 * (total_cost / total_sum)), ndigits=2)
+            revenue_percent = round((100 * (total_revenue / total_sum)), ndigits=2)
+        else:
+            profit_percent = 0
+            cost_percent = 0
+            revenue_percent = 0
+            daily_purchases = (Purchase.objects.annotate(date=TruncDate('timestamp')).values('date').annotate(count=Count('id')).order_by('date')
         )
         
         purchase_date = [sale['date'] for sale in daily_purchases]
         purchase_num = [sale['count'] for sale in daily_purchases]
 
-        recent_actions = Action.objects.order_by('-timestamp')[:10]
+        recent_actions = Action.objects.order_by('-timestamp')[:5]
         
         context['recent_actions'] = recent_actions
         context['purchase_count'] = purchases.count()
@@ -174,7 +187,7 @@ def add_purchase(request):
         purchase.save()  
         Action.objects.create(
             user=request.user,
-            action_type='added',
+            action_type='purchased',
             item=purchase.item
         )
         return redirect('purchase_log')
@@ -233,6 +246,8 @@ def make_purchase(request, id, quantity):
         messages.error(request, f'Insufficient stock for {ingredient.name}. {ingredient.quantity}{ingredient.unit} available.')
     return redirect('purchase_log')
 
+@login_required
+@csrf_protect
 def home(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
@@ -248,6 +263,7 @@ def authView(request):
         form = UserCreationForm()
     return render(request, "registration/signup.html", {"form": form})
 
+@csrf_protect
 def signup(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -259,8 +275,16 @@ def signup(request):
             return redirect('signup')  
 
         user = User.objects.create_user(username=username, password=password)
+
+        Ingredient.objects.all().delete()  
+        MenuItem.objects.all().delete()     
+        RecipeRequirement.objects.all().delete()  
+        Purchase.objects.all().delete()
+        Dashboard.objects.all().delete()
+        Action.objects.all().delete()
+
         login(request, user)  
-        messages.success(request, "Signup successful!")
         return redirect('dashboard') 
 
     return render(request, 'signup')
+
