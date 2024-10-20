@@ -64,9 +64,9 @@ class DashboardView(ListView):
 
         profit = total_revenue - total_cost
 
-        profit_percent = 100 * (profit/(total_revenue + total_cost + profit))
-        cost_percent = 100 * (total_cost/(total_revenue + total_cost + profit))
-        revenue_percent = 100 * (total_revenue/(total_revenue + total_cost + profit))
+        profit_percent = round((100 * (profit/(total_revenue + total_cost + profit))), ndigits=2)
+        cost_percent = round((100 * (total_cost/(total_revenue + total_cost + profit))), ndigits=2)
+        revenue_percent = round((100 * (total_revenue/(total_revenue + total_cost + profit))), ndigits=2)
 
         daily_purchases = (Purchase.objects.annotate(date=TruncDate('timestamp')).values('date').annotate(count=Count('id')).order_by('date')
         )
