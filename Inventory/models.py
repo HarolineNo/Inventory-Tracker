@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -49,4 +50,13 @@ class Dashboard(models.Model):
     
     def __str__(self):
         return self.name
+    
+class Action(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    action_type = models.CharField(max_length=200) 
+    item = models.CharField(max_length=255)  
+    timestamp = models.DateTimeField(auto_now_add=True)  
+
+    def __str__(self):
+        return f"{self.user.username} {self.action_type} {self.item} on {self.timestamp}"
     

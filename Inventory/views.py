@@ -8,6 +8,8 @@ from .forms import*
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.db.models.functions import TruncDate
+from .models import Action
+
 
 # Create your views here.
 
@@ -77,6 +79,9 @@ class DashboardView(ListView):
         purchase_date = [sale['date'] for sale in daily_purchases]
         purchase_num = [sale['count'] for sale in daily_purchases]
 
+        recent_actions = Action.objects.order_by('-timestamp')[:10]
+        
+        context['recent_actions'] = recent_actions
         context['purchase_count'] = purchases.count()
         context['item_count'] = item_count
         context['total_cost'] = total_cost
@@ -105,6 +110,11 @@ def add_ingredient(request):
             expiration_date=request.POST.get('expiration_date')
         )
         ingredient.save()  
+        Action.objects.create(
+            user=request.user,
+            action_type='added',
+            item=ingredient.name
+        )
         return redirect('ingredients_list')
     return render(request, 'ingredients_list')
 
@@ -115,6 +125,11 @@ def add_item(request):
             price=request.POST['price']
         )
         menu.save()  
+        Action.objects.create(
+            user=request.user,
+            action_type='added',
+            item=menu.item
+        )
         return redirect('menu_items')
     return render(request, 'menu_items')
 
@@ -136,6 +151,11 @@ def add_recipe(request):
             price=menu_price
         )
         recipe.save()
+        Action.objects.create(
+            user=request.user,
+            action_type='added',
+            item=recipe.item
+        )
         return redirect('recipe_requirements')
     return render(request, 'forms/inventory/recipeform.html')
 
@@ -161,36 +181,52 @@ def add_purchase(request):
             cost=recipe.price
         )
         purchase.save()  
+        Action.objects.create(
+            user=request.user,
+            action_type='added',
+            item=purchase.item
+        )
         return redirect('purchase_log')
     return render(request, 'purchase_log')
     
 
-def menuform_view(request):
-    return render(request, 'forms/inventory/menuform.html')
-
-def recipeform_view(request):
-    return render(request, 'forms/inventory/recipeform.html')
-
-def purform_view(request):
-    return render(request, 'forms/inventory/purform.html')
-
 def delete_item(request, id):
      obj = Ingredient.objects.get(id=id)
+     Action.objects.create(
+            user=request.user,
+            action_type='deleted',
+            item=obj.name
+        )
      obj.delete()
      return redirect('ingredients_list')
 
 def delete_menu(request, id):
      obj = MenuItem.objects.get(id=id)
+     Action.objects.create(
+            user=request.user,
+            action_type='deleted',
+            item=obj.item
+        )
      obj.delete()
      return redirect('menu_items')
 
 def delete_recipe(request, id):
      obj = RecipeRequirement.objects.get(id=id)
+     Action.objects.create(
+            user=request.user,
+            action_type='deleted',
+            item=obj.item
+        )
      obj.delete()
      return redirect('recipe_requirements')
 
 def delete_purchase(request, id):
      obj = Purchase.objects.get(id=id)
+     Action.objects.create(
+            user=request.user,
+            action_type='deleted',
+            item=obj.item
+        )
      obj.delete()
      return redirect('purchase_log')
 
