@@ -1,8 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 from Inventory.views import* 
 from .apiViews import*
 
 urlpatterns = [
+    path('', home, name='home'),
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('ingredients/', InventoryView.as_view(), name='ingredients_list'),
     path('menu/', MenuView.as_view(), name='menu_items'),
     path('recipes/', RecipeView.as_view(), name='recipe_requirements'),
@@ -12,15 +14,13 @@ urlpatterns = [
     path('add_recipe/', add_recipe, name='add_recipe'),
     path('add_purchase/', add_purchase, name='add_purchase'),
     path('delete-ingredient/<int:id>/', delete_item, name='delete_item'),
-    path('delete-menu/<int:id>/', delete_item, name='delete_menu'),
+    path('delete-menu/<int:id>/', delete_menu, name='delete_menu'),
     path('delete-recipe/<int:id>/', delete_recipe, name='delete_recipe'),
     path('delete-purchase/<int:id>/', delete_purchase, name='delete_purchase'),
-    path('edit-item/<int:id>/', edit_item, name='edit_item'),
-    path('update/<int:id>/', update, name='update'),
-    path('edit-menu/<int:id>/', edit_menu, name='edit_menu'),
-    path('update_menu/<int:id>/', update_menu, name='update_menu'),
-    path('edit-recipe/<int:id>/', edit_recipe, name='edit_recipe'),
-    path('update_recipe/<int:id>/', update_recipe, name='update_recipe'),
     path('purchase/<int:ingredient_id>/<int:quantity>/', make_purchase, name='make_purchase'),
-    path('save_inventory', save_inventory, name='save_inventory')
+    path('save_inventory/', save_inventory, name='save_inventory'),
+    path('save_menu/', save_menu, name='save_menu'),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('signup/', authView, name='signup'),
+    path('create_account/', signup, name='create_account')
 ]
