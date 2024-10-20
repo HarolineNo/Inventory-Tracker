@@ -68,11 +68,6 @@ class DashboardView(ListView):
         cost_percent = 100 * (total_cost/(total_revenue + total_cost + profit))
         revenue_percent = 100 * (total_revenue/(total_revenue + total_cost + profit))
 
-        item_count = purchases.values('item').annotate(count=Count('item'))
-
-        items = [item['item'] for item in item_count]
-        counts = [item['count'] for item in item_count]
-
         daily_purchases = (Purchase.objects.annotate(date=TruncDate('timestamp')).values('date').annotate(count=Count('id')).order_by('date')
         )
         
@@ -83,16 +78,12 @@ class DashboardView(ListView):
         
         context['recent_actions'] = recent_actions
         context['purchase_count'] = purchases.count()
-        context['item_count'] = item_count
         context['total_cost'] = total_cost
         context['total_revenue'] = total_revenue
         context['profit'] = profit
         context['profit_percent'] = profit_percent
         context['revenue_percent'] = revenue_percent
         context['cost_percent'] = cost_percent
-        context['item_count'] = item_count
-        context['items'] = items
-        context['counts'] = counts
         context['purchase_date'] = purchase_date
         context['purchase_num'] = purchase_num
         return context

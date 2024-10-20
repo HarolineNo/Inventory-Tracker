@@ -1,44 +1,127 @@
-{% extends 'inventory/inventory.html' %}
-{% block tile %}Dashboard{% endblock tile %}
-{% block page_title %}Dashboard{% endblock page_title %}
-
-{% block stock %}
-    <div class="mb-4 pb-2 fs-2" style="color: rgb(50,50,50); border-bottom: 1px solid rgb(200,200,200);">
-        Dashboard
-    </div>
-    <div class="mb-5 container-fluid">
-        <div class="row justify-content-around">
-            <div id="boxes" class="d-flex col-md-3 align-items-center fs-5">
-                <i class="bi bi-box-seam" style="margin-right: 10px; margin-left: 10px;"></i>Total Cost: <span class="fs-3" style="margin-left: 15px;">${{ total_cost }}</span>
-            </div>
-            <div id="boxes" class="d-flex col-md-3 align-items-center fs-5">
-                <i class="bi bi-box-seam" style="margin-right: 10px; margin-left: 10px;"></i>Total Revenue: <span class="fs-3" style="margin-left: 15px;">${{ total_revenue }}</span>
-            </div>
-            <div id="boxes" class="d-flex col-md-3 align-items-center fs-5">
-                <i class="bi bi-box-seam" style="margin-right: 10px; margin-left: 10px;"></i>Total Profit: <span class="fs-3" style="margin-left: 15px;">${{ profit }}</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <title>Dashboard</title>
+    <style>
+        body {
+            background-color: rgb(244, 246, 250);
+            display: flex;
+        }
+        .nav-link:hover {
+            background-color: #3d94b7;
+        } 
+        
+        #boxes {
+            padding: 20px; 
+            background-color: white;  
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgb(0,0,0,0.1);
+            position: relative;
+        }
+        #boxes::before {
+            content: "";
+            top: 0;
+            height: max-content; 
+            left: 0;
+            height: 100%;
+            position: absolute;
+            width: 20px; 
+            background: #124E66; 
+            border-radius: 10px 0px 0px 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark fixed-top" style="background-color: #09252f">
+        <div class="container-fluid d-flex justify-content-start align-items-center">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#main-nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <span class="text-light fs-5"> 
+                <strong style="margin-left: 10px;">Inventory</strong> Tracker
+            </span>
+        </div>
+    </nav>
+    
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+        <div class="container-fluid d-flex justify-content-start align-items-center">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <span class="fw-bold text-light fs-5" style="margin-left: 10px;"> 
+                Inventory Tracker
+            </span>
+            <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="main-nav">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Main Menu</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="p-3">
+                    <a class="nav-link mt-3 mb-4 fs-5" href="{% url 'dashboard' %}">
+                        <i class="bi bi-house" style="margin-right: 10px;"></i>Dashboard
+                    </a>
+                    <a class="nav-link mt-3 mb-4 fs-5" href="{% url 'ingredients_list' %}">
+                        <i class="bi bi-table" style="margin-right: 10px;"></i>Inventory
+                    </a>
+                    <a class="nav-link mb-4 fs-5" href="{% url 'menu_items' %}">
+                        <i class="bi bi-cup" style="margin-right: 10px;"></i>Menu</a>
+                    <a class="nav-link mb-4 fs-5" href="{% url 'recipe_requirements' %}">
+                        <i class="bi bi-card-list" style="margin-right: 10px;"></i>Recipe
+                    </a>
+                    <a class="nav-link fs-5" href="{% url 'purchase_log' %}">
+                        <i class="bi bi-bag" style="margin-right: 10px;"></i>Purchase
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-{% endblock stock %}
-{% block table %}
-    <div class="col d-flex justify-content-around">
-        <h2>Recent Actions</h2>
-        <ul>
-            {% for action in recent_actions %}
-                <li>
-                    <strong>{{ action.user.username }}</strong>
-                    {{ action.action_type }} "{{ action.item }}"
-                    <em>on {{ action.timestamp|date:"Y-m-d H:i:s" }}</em>
-                </li>
-            {% empty %}
-                <li>No recent actions found.</li>
-            {% endfor %}
-        </ul>
+    </nav>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <!--Stock-->
+            <div class="col mt-5 pt-3 p-3">
+        <div class="mb-4 pb-2 fs-2" style="color: rgb(50,50,50); border-bottom: 1px solid rgb(200,200,200);">
+            Dashboard
+        </div>
+        <div class="mb-5 container-fluid">
+            <div class="row justify-content-around">
+                <div id="boxes" class="d-flex col-md-3 align-items-center fs-5">
+                    <i class="bi bi-box-seam" style="margin-right: 10px; margin-left: 10px;"></i>Total Cost: <span class="fs-3" style="margin-left: 15px;">${{ total_cost }}</span>
+                </div>
+                <div id="boxes" class="d-flex col-md-3 align-items-center fs-5">
+                    <i class="bi bi-box-seam" style="margin-right: 10px; margin-left: 10px;"></i>Total Revenue: <span class="fs-3" style="margin-left: 15px;">${{ total_revenue }}</span>
+                </div>
+                <div id="boxes" class="d-flex col-md-3 align-items-center fs-5">
+                    <i class="bi bi-box-seam" style="margin-right: 10px; margin-left: 10px;"></i>Total Profit: <span class="fs-3" style="margin-left: 15px;">${{ profit }}</span>
+                </div>
+            </div>
+        </div>
+    <div class="row d-flex justify-content-around align-items-center">
+        <div class="col-md-3 card d-flex" style="width: 18rem;">
+            <h2 class="card-header" style="text-align: center;">Recent Actions</h2>
+            <ul class="list-group list-group-flush">
+                {% for action in recent_actions %}
+                    <li class="list-group-item">
+                        <strong>{{ action.user.username }}</strong>
+                        {{ action.action_type }} "{{ action.item }}"
+                        <em>on {{ action.timestamp|date:"Y-m-d H:i:s" }}</em>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No recent actions found.</li>
+                {% endfor %}
+            </ul>
+        </div>
 
         <!--Doughnut chart for Sales/Revenue/Profit-->
-        <div class="col-md-4">
+        <div class="col-md-3 d-flex">
             <div>
-                <canvas id="doughnutChart"></canvas>
+                <canvas id="doughnutChart" style="width: 400px; height: 400px;"></canvas>
             </div>
 
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -70,12 +153,12 @@
                     },
                 });
             </script> 
-        </div>
+        </div> 
 
-        <div class="col-md-6">
+        <div class="col-md-3 d-flex">
             <!--Line chart for Sales-->
             <div>
-                <canvas id="lineChart"></canvas>
+                <canvas id="lineChart" style="width: 400px; height: 400px;"></canvas>
             </div>
             <script>
                 const ctxLine = document.getElementById('lineChart');
@@ -111,49 +194,7 @@
                 });
             </script>  
         </div>
-
-        <div class="col-md-6">
-            <!--Bar chart for Purchased Items: FIXME-->
-            <div>
-                <canvas id="barChart"></canvas>
-            </div>
-            <script>
-                const ctxBar = document.getElementById('barChart');
-                new Chart(ctxBar, {
-                    type: 'bar',
-                    data: {
-                        labels: [{% for item in items %}'{{ item }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
-                        datasets: [{
-                            label: '# of Purchases',
-                            data: [{% for count in counts %}{{ count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
-                            borderWidth: 1,
-                            backgroundColor: 'rgba(144, 238, 144, 0.5)' // Add color for better visibility
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Items Purchased'
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    },
-                });
-                </script>  
-            </div>
-        </div>
-{% endblock table%}
-{% block form %}{% endblock form %}
-
-<!--add chart to measure sales per day, most purchased item, and sales vs revenue vs cost-->
-<!--line graph, bar chart, pie graph-->
-
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
